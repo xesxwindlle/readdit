@@ -58,9 +58,9 @@ public class AuthorSubmissionController {
         return ResponseEntity.status(HttpStatus.OK).body(submissionSrvc.getAll());
     }
 
-    @GetMapping("/pending")
-    public ResponseEntity<List<AuthorSubmission>> getPending() {
-        return ResponseEntity.status(HttpStatus.OK).body(submissionSrvc.getPending());
+    @GetMapping("/status/{reviewStatus}")
+    public ResponseEntity<List<AuthorSubmission>> getByReviewStatus(@PathVariable String reviewStatus) {
+        return ResponseEntity.status(HttpStatus.OK).body(submissionSrvc.getByReviewStatus(reviewStatus));
     }
 
     @DeleteMapping("/{submissionId}")
@@ -69,4 +69,5 @@ public class AuthorSubmissionController {
         submissionSrvc.deleteById(submissionId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
+    
 }

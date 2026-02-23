@@ -24,7 +24,10 @@ public class BookSubmissionService {
     private BookRepository bookRepo;
 
     public BookSubmission submit(BookSubmissionRequest req) {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
         BookSubmission submission = new BookSubmission();
+        submission.setCreatedAt(now);
+        submission.setUpdatedAt(now);
         submission.setBookId(req.getBookId());
         submission.setSubmitterId(req.getSubmitterId());
         submission.setSubmitterComment(req.getSubmitterComment());
@@ -84,11 +87,11 @@ public class BookSubmissionService {
     }
 
     public List<BookSubmission> getAll() {
-        return submissionRepo.getAll();
+        return submissionRepo.findAll();
     }
 
     public List<BookSubmission> getPending() {
-        return submissionRepo.getByStatus("pending");
+        return submissionRepo.findByReviewStatus("pending");
     }
 
     public void deleteById(int id) {

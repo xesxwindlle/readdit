@@ -23,22 +23,26 @@ public class AuthorSubmissionService {
     @Autowired
     private AuthorRepository authorRepo;
 
+    // public AuthorSubmission submit(AuthorSubmissionRequest req) {
+    //     AuthorSubmission submission = new AuthorSubmission();
+    //     submission.setAuthorId(req.getAuthorId());
+    //     submission.setSubmitterId(req.getSubmitterId());
+    //     submission.setSubmitterComment(req.getSubmitterComment());
+    //     submission.setReviewStatus("pending");
+    //     submission.setAuthorName(req.getAuthorName());
+    //     submission.setDateOfBirth(req.getDateOfBirth());
+    //     submission.setDateOfDeath(req.getDateOfDeath());
+    //     submission.setAuthorImageUrl(req.getAuthorImageUrl());
+    //     submission.setBiography(req.getBiography());
+    //     return submissionRepo.insert(submission);
+    // }
+
     public AuthorSubmission submit(AuthorSubmissionRequest req) {
-        AuthorSubmission submission = new AuthorSubmission();
-        submission.setAuthorId(req.getAuthorId());
-        submission.setSubmitterId(req.getSubmitterId());
-        submission.setSubmitterComment(req.getSubmitterComment());
-        submission.setReviewStatus("pending");
-        submission.setAuthorName(req.getAuthorName());
-        submission.setDateOfBirth(req.getDateOfBirth());
-        submission.setDateOfDeath(req.getDateOfDeath());
-        submission.setAuthorImageUrl(req.getAuthorImageUrl());
-        submission.setBiography(req.getBiography());
-        return submissionRepo.insert(submission);
+        return submissionRepo.save(req.toAuthorSubmission());
     }
 
     public AuthorSubmission review(int submissionId, ReviewRequest req) {
-        AuthorSubmission submission = submissionRepo.getById(submissionId);
+        AuthorSubmission submission = submissionRepo.findById(submissionId).orElse(new AuthorSubmission());
 
         submission.setReviewerId(req.getReviewerId());
         submission.setReviewerComment(req.getReviewerComment());
@@ -72,20 +76,20 @@ public class AuthorSubmissionService {
             }
         }
 
-        submissionRepo.update(submission);
+        submissionRepo.save(submission);
         return submission;
     }
 
     public AuthorSubmission getById(int id) {
-        return submissionRepo.getById(id);
+        return submissionRepo.findById(id).orElse(new AuthorSubmission());
     }
 
     public List<AuthorSubmission> getAll() {
-        return submissionRepo.getAll();
+        return submissionRepo.findAll();
     }
 
-    public List<AuthorSubmission> getPending() {
-        return submissionRepo.getByStatus("pending");
+    public List<AuthorSubmission> getByReviewStatus(String status) {
+        return submissionRepo.findByReviewStatus(status);
     }
 
     public void deleteById(int id) {

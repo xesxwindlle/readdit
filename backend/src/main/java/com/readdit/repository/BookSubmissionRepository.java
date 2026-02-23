@@ -128,7 +128,6 @@ import com.readdit.model.BookSubmission;
 
 @RepositoryRestResource(exported = false)
 public interface BookSubmissionRepository extends CrudRepository<BookSubmission, Integer> {
-    List<BookSubmission> getAll();
-    List<BookSubmission> getByStatus(String status);
-    BookSubmission deleteById(int id);
+    List<BookSubmission> findAll();
+    List<BookSubmission> findByReviewStatus(String reviewStatus);
 };

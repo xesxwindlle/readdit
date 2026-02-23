@@ -1,10 +1,12 @@
 package com.readdit.dto.request;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+
+import com.readdit.model.AuthorSubmission;
 
 public class AuthorSubmissionRequest {
 
-    private Integer authorId;          // null = new author, non-null = edit to existing
     private int submitterId;
     private String submitterComment;
 
@@ -16,9 +18,6 @@ public class AuthorSubmissionRequest {
     private String biography;
 
     public AuthorSubmissionRequest() {}
-
-    public Integer getAuthorId() { return authorId; }
-    public void setAuthorId(Integer authorId) { this.authorId = authorId; }
 
     public int getSubmitterId() { return submitterId; }
     public void setSubmitterId(int submitterId) { this.submitterId = submitterId; }
@@ -40,4 +39,20 @@ public class AuthorSubmissionRequest {
 
     public String getBiography() { return biography; }
     public void setBiography(String biography) { this.biography = biography; }
+
+    public AuthorSubmission toAuthorSubmission() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        AuthorSubmission submission = new AuthorSubmission();
+        submission.setCreatedAt(now);
+        submission.setUpdatedAt(now);
+        submission.setSubmitterId(submitterId);
+        submission.setSubmitterComment(submitterComment);
+        submission.setReviewStatus("pending");
+        submission.setAuthorName(authorName);
+        submission.setDateOfBirth(dateOfBirth);
+        submission.setDateOfDeath(dateOfDeath);
+        submission.setAuthorImageUrl(authorImageUrl);
+        submission.setBiography(biography);
+        return submission;
+    }
 }
