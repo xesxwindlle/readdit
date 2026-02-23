@@ -25,7 +25,6 @@ public class BookSubmissionService {
 
     public BookSubmission submit(BookSubmissionRequest req) {
         BookSubmission submission = new BookSubmission();
-        submission.setPreviousSubmissionId(req.getPreviousSubmissionId());
         submission.setBookId(req.getBookId());
         submission.setSubmitterId(req.getSubmitterId());
         submission.setSubmitterComment(req.getSubmitterComment());
@@ -37,11 +36,11 @@ public class BookSubmissionService {
         submission.setReleaseDate(req.getReleaseDate());
         submission.setCoverUrl(req.getCoverUrl());
         submission.setCoverImage(req.getCoverImage());
-        return submissionRepo.insert(submission);
+        return submissionRepo.save(submission);
     }
 
     public BookSubmission review(int submissionId, ReviewRequest req) {
-        BookSubmission submission = submissionRepo.getById(submissionId);
+        BookSubmission submission = submissionRepo.findById(submissionId).orElse(new BookSubmission());
 
         submission.setReviewerId(req.getReviewerId());
         submission.setReviewerComment(req.getReviewerComment());
@@ -76,12 +75,12 @@ public class BookSubmissionService {
             }
         }
 
-        submissionRepo.update(submission);
+        submissionRepo.save(submission);
         return submission;
     }
 
     public BookSubmission getById(int id) {
-        return submissionRepo.getById(id);
+        return submissionRepo.findById(id).orElse(new BookSubmission());
     }
 
     public List<BookSubmission> getAll() {

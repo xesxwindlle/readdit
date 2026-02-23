@@ -15,7 +15,6 @@ public class BookSubmission {
     private Timestamp updatedAt;
 
     // Submission meta
-    private Integer previousSubmissionId;
     private Integer bookId; // null = new book, non-null = edit to existing
     private int submitterId;
     private String submitterComment;
@@ -58,14 +57,6 @@ public class BookSubmission {
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public Integer getPreviousSubmissionId() {
-        return previousSubmissionId;
-    }
-
-    public void setPreviousSubmissionId(Integer previousSubmissionId) {
-        this.previousSubmissionId = previousSubmissionId;
     }
 
     public Integer getBookId() {

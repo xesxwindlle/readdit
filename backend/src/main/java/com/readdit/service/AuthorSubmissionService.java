@@ -25,7 +25,6 @@ public class AuthorSubmissionService {
 
     public AuthorSubmission submit(AuthorSubmissionRequest req) {
         AuthorSubmission submission = new AuthorSubmission();
-        submission.setPreviousSubmissionId(req.getPreviousSubmissionId());
         submission.setAuthorId(req.getAuthorId());
         submission.setSubmitterId(req.getSubmitterId());
         submission.setSubmitterComment(req.getSubmitterComment());

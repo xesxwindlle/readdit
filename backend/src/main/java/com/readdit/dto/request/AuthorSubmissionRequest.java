@@ -5,7 +5,6 @@ import java.sql.Date;
 public class AuthorSubmissionRequest {
 
     private Integer authorId;          // null = new author, non-null = edit to existing
-    private Integer previousSubmissionId;
     private int submitterId;
     private String submitterComment;
 
@@ -20,9 +19,6 @@ public class AuthorSubmissionRequest {
 
     public Integer getAuthorId() { return authorId; }
     public void setAuthorId(Integer authorId) { this.authorId = authorId; }
-
-    public Integer getPreviousSubmissionId() { return previousSubmissionId; }
-    public void setPreviousSubmissionId(Integer previousSubmissionId) { this.previousSubmissionId = previousSubmissionId; }
 
     public int getSubmitterId() { return submitterId; }
     public void setSubmitterId(int submitterId) { this.submitterId = submitterId; }

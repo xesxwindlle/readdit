@@ -3,9 +3,8 @@ package com.readdit.dto.request;
 import java.sql.Date;
 
 public class BookSubmissionRequest {
-
-    private Integer bookId;            // null = new book, non-null = edit to existing
-    private Integer previousSubmissionId;
+    
+    private Integer bookId;
     private int submitterId;
     private String submitterComment;
 
@@ -22,9 +21,6 @@ public class BookSubmissionRequest {
 
     public Integer getBookId() { return bookId; }
     public void setBookId(Integer bookId) { this.bookId = bookId; }
-
-    public Integer getPreviousSubmissionId() { return previousSubmissionId; }
-    public void setPreviousSubmissionId(Integer previousSubmissionId) { this.previousSubmissionId = previousSubmissionId; }
 
     public int getSubmitterId() { return submitterId; }
     public void setSubmitterId(int submitterId) { this.submitterId = submitterId; }

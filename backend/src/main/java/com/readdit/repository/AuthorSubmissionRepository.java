@@ -21,18 +21,17 @@ public class AuthorSubmissionRepository {
     public AuthorSubmission insert(AuthorSubmission submission) {
         String sql = """
                 INSERT INTO author_submission (
-                    previous_submission_id, author_id, submitter_id, submitter_comment,
+                    author_id, submitter_id, submitter_comment,
                     review_status, author_name, date_of_birth, date_of_death,
                     author_image_url, biography
                 ) VALUES (
-                    :previousSubmissionId, :authorId, :submitterId, :submitterComment,
+                    :authorId, :submitterId, :submitterComment,
                     :reviewStatus, :authorName, :dateOfBirth, :dateOfDeath,
                     :authorImageUrl, :biography
                 )
                 """;
 
         MapSqlParameterSource params = new MapSqlParameterSource()
-                .addValue("previousSubmissionId", submission.getPreviousSubmissionId())
                 .addValue("authorId", submission.getAuthorId())
                 .addValue("submitterId", submission.getSubmitterId())
                 .addValue("submitterComment", submission.getSubmitterComment())

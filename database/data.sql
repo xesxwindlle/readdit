@@ -132,29 +132,29 @@ INSERT INTO book_review (user_id, book_id, content, likes_count, rating, is_feat
 -- ----------------------
 -- Author Submissions
 -- ----------------------
-INSERT INTO author_submission (previous_submission_id, author_id, submitter_id, submitter_comment, reviewer_id, reviewer_comment, reviewed_at, review_status, author_name, date_of_birth, date_of_death, author_image_url, biography) VALUES
+INSERT INTO author_submission (author_id, submitter_id, submitter_comment, reviewer_id, reviewer_comment, reviewed_at, review_status, author_name, date_of_birth, date_of_death, author_image_url, biography) VALUES
 -- New author (author_id NULL = not in the system yet), pending review
-(NULL, NULL, 2, 'Submitting a new author I think should be added.', NULL, NULL, NULL, 'pending',
+(NULL, 2, 'Submitting a new author I think should be added.', NULL, NULL, NULL, 'pending',
  'Martin Fowler', '1963-12-18', NULL, NULL, 'Martin Fowler is a software developer and author known for his work on refactoring and enterprise application architecture.'),
 -- Edit to existing author (Craig Walls, id=1), approved
-(NULL, 1, 1, 'Correcting biography to include more recent work.', 3, 'Looks good, approved.', '2026-02-15 10:30:00', 'approved',
+(1, 1, 'Correcting biography to include more recent work.', 3, 'Looks good, approved.', '2026-02-15 10:30:00', 'approved',
  'Craig Walls', '1967-03-15', NULL, NULL, 'Craig Walls is a software developer and author best known for Spring in Action. He works at Pivotal and is an advocate for Spring Boot.'),
 -- New author submission, rejected due to insufficient info
-(NULL, NULL, 4, 'Adding a new author.', 3, 'Insufficient biographical information provided.', '2026-02-16 14:00:00', 'rejected',
+(NULL, 4, 'Adding a new author.', 3, 'Insufficient biographical information provided.', '2026-02-16 14:00:00', 'rejected',
  'Unknown Dev', NULL, NULL, NULL, 'A developer.');
 
 -- ----------------------
 -- Book Submissions
 -- ----------------------
-INSERT INTO book_submission (previous_submission_id, book_id, submitter_id, submitter_comment, reviewer_id, reviewer_comment, reviewed_at, review_status, title, isbn, book_description, publisher_id, release_date, cover_url, cover_image) VALUES
+INSERT INTO book_submission (book_id, submitter_id, submitter_comment, reviewer_id, reviewer_comment, reviewed_at, review_status, title, isbn, book_description, publisher_id, release_date, cover_url, cover_image) VALUES
 -- New book (book_id NULL = not in the system yet), pending review
-(NULL, NULL, 2, 'This book is missing from the catalog.', NULL, NULL, NULL, 'pending',
+(NULL, 2, 'This book is missing from the catalog.', NULL, NULL, NULL, 'pending',
  'Clean Code', '9780132350884', 'A handbook of agile software craftsmanship by Robert C. Martin.', 'AW', '2008-08-01', NULL, NULL),
 -- Edit to existing book (Spring in Action, id=1), approved
-(NULL, 1, 1, 'Updating description for Spring in Action.', 3, 'Approved, information verified.', '2026-02-18 09:00:00', 'approved',
+(1, 1, 'Updating description for Spring in Action.', 3, 'Approved, information verified.', '2026-02-18 09:00:00', 'approved',
  'Spring in Action, 4/e', '161729120X', 'A comprehensive guide to the Spring Framework covering Spring MVC, Spring Boot, and more.', 'MP', '2014-11-27', NULL, NULL),
 -- New book submission, rejected
-(NULL, NULL, 4, 'Adding a book I read recently.', 3, 'Could not verify ISBN or publisher details.', '2026-02-19 11:30:00', 'rejected',
+(NULL, 4, 'Adding a book I read recently.', 3, 'Could not verify ISBN or publisher details.', '2026-02-19 11:30:00', 'rejected',
  'Some Random Book', NULL, NULL, 'OA', NULL, NULL, NULL);
 
 -- ----------------------

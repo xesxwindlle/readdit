@@ -80,7 +80,6 @@ CREATE TABLE author_submission (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     -- Submission data
-    previous_submission_id INT, -- ID of previous approved submisison for comparison, NULL for new submissions
     author_id INT, -- ID of original author in authors table
     submitter_id INT NOT NULL,
     submitter_comment TEXT,
@@ -112,7 +111,6 @@ CREATE TABLE book_submission (
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
     -- Submission data
-    previous_submission_id INT, -- ID of previous approved submisison for comparison, NULL for new submissions
     book_id INT, -- ID of original book in book table, NULL for new submissions
     submitter_id INT NOT NULL,
     submitter_comment TEXT,
