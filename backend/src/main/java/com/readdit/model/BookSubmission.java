@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("book_submission")
+@Table
 public class BookSubmission {
 
     @Id
@@ -16,7 +16,7 @@ public class BookSubmission {
 
     // Submission meta
     private Integer previousSubmissionId;
-    private Integer bookId;           // null = new book, non-null = edit to existing
+    private Integer bookId; // null = new book, non-null = edit to existing
     private int submitterId;
     private String submitterComment;
     private Integer reviewerId;
@@ -33,59 +33,150 @@ public class BookSubmission {
     private String coverUrl;
     private byte[] coverImage;
 
-    public BookSubmission() {}
+    public BookSubmission() {
+    }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public Timestamp getCreatedAt() { return createdAt; }
-    public void setCreatedAt(Timestamp createdAt) { this.createdAt = createdAt; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public Timestamp getUpdatedAt() { return updatedAt; }
-    public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
+    public Timestamp getCreatedAt() {
+        return createdAt;
+    }
 
-    public Integer getPreviousSubmissionId() { return previousSubmissionId; }
-    public void setPreviousSubmissionId(Integer previousSubmissionId) { this.previousSubmissionId = previousSubmissionId; }
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
 
-    public Integer getBookId() { return bookId; }
-    public void setBookId(Integer bookId) { this.bookId = bookId; }
+    public Timestamp getUpdatedAt() {
+        return updatedAt;
+    }
 
-    public int getSubmitterId() { return submitterId; }
-    public void setSubmitterId(int submitterId) { this.submitterId = submitterId; }
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
 
-    public String getSubmitterComment() { return submitterComment; }
-    public void setSubmitterComment(String submitterComment) { this.submitterComment = submitterComment; }
+    public Integer getPreviousSubmissionId() {
+        return previousSubmissionId;
+    }
 
-    public Integer getReviewerId() { return reviewerId; }
-    public void setReviewerId(Integer reviewerId) { this.reviewerId = reviewerId; }
+    public void setPreviousSubmissionId(Integer previousSubmissionId) {
+        this.previousSubmissionId = previousSubmissionId;
+    }
 
-    public String getReviewerComment() { return reviewerComment; }
-    public void setReviewerComment(String reviewerComment) { this.reviewerComment = reviewerComment; }
+    public Integer getBookId() {
+        return bookId;
+    }
 
-    public Timestamp getReviewedAt() { return reviewedAt; }
-    public void setReviewedAt(Timestamp reviewedAt) { this.reviewedAt = reviewedAt; }
+    public void setBookId(Integer bookId) {
+        this.bookId = bookId;
+    }
 
-    public String getReviewStatus() { return reviewStatus; }
-    public void setReviewStatus(String reviewStatus) { this.reviewStatus = reviewStatus; }
+    public int getSubmitterId() {
+        return submitterId;
+    }
 
-    public String getTitle() { return title; }
-    public void setTitle(String title) { this.title = title; }
+    public void setSubmitterId(int submitterId) {
+        this.submitterId = submitterId;
+    }
 
-    public String getIsbn() { return isbn; }
-    public void setIsbn(String isbn) { this.isbn = isbn; }
+    public String getSubmitterComment() {
+        return submitterComment;
+    }
 
-    public String getBookDescription() { return bookDescription; }
-    public void setBookDescription(String bookDescription) { this.bookDescription = bookDescription; }
+    public void setSubmitterComment(String submitterComment) {
+        this.submitterComment = submitterComment;
+    }
 
-    public String getPublisherId() { return publisherId; }
-    public void setPublisherId(String publisherId) { this.publisherId = publisherId; }
+    public Integer getReviewerId() {
+        return reviewerId;
+    }
 
-    public Date getReleaseDate() { return releaseDate; }
-    public void setReleaseDate(Date releaseDate) { this.releaseDate = releaseDate; }
+    public void setReviewerId(Integer reviewerId) {
+        this.reviewerId = reviewerId;
+    }
 
-    public String getCoverUrl() { return coverUrl; }
-    public void setCoverUrl(String coverUrl) { this.coverUrl = coverUrl; }
+    public String getReviewerComment() {
+        return reviewerComment;
+    }
 
-    public byte[] getCoverImage() { return coverImage; }
-    public void setCoverImage(byte[] coverImage) { this.coverImage = coverImage; }
+    public void setReviewerComment(String reviewerComment) {
+        this.reviewerComment = reviewerComment;
+    }
+
+    public Timestamp getReviewedAt() {
+        return reviewedAt;
+    }
+
+    public void setReviewedAt(Timestamp reviewedAt) {
+        this.reviewedAt = reviewedAt;
+    }
+
+    public String getReviewStatus() {
+        return reviewStatus;
+    }
+
+    public void setReviewStatus(String reviewStatus) {
+        this.reviewStatus = reviewStatus;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
+
+    public String getBookDescription() {
+        return bookDescription;
+    }
+
+    public void setBookDescription(String bookDescription) {
+        this.bookDescription = bookDescription;
+    }
+
+    public String getPublisherId() {
+        return publisherId;
+    }
+
+    public void setPublisherId(String publisherId) {
+        this.publisherId = publisherId;
+    }
+
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
+    }
+
+    public byte[] getCoverImage() {
+        return coverImage;
+    }
+
+    public void setCoverImage(byte[] coverImage) {
+        this.coverImage = coverImage;
+    }
 }

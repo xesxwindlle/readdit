@@ -6,7 +6,7 @@ import java.sql.Timestamp;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
-@Table("author")
+@Table
 public class Author {
 
     @Id

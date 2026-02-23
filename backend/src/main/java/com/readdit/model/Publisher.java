@@ -10,20 +10,23 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table
 public class Publisher implements Persistable<String> {
     @Id
-    private String id; 
+    private String id;
     private String name;
 
-    public Publisher() {}
-
-    public Publisher(String id, String name) {
-        this.id = id;
-        this.name = name;
-        this.isNew = true;
+    public Publisher() {
     }
 
-    public void setId(String id) { this.id = id; }
-    public String getName() { return name; }
-    public void setName(String name) { this.name = name; }
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @Transient
     @JsonIgnore
@@ -38,10 +41,10 @@ public class Publisher implements Persistable<String> {
     public void setNew(boolean isNew) {
         this.isNew = isNew;
     }
-    
+
     @Override
     public String getId() {
         return this.id;
     }
-    
+
 }

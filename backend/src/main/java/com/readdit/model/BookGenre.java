@@ -13,10 +13,7 @@ public class BookGenre {
 
     private int genreId;
 
-    public BookGenre(int bookId, int genreId) {
-        this.bookId = bookId;
-        this.genreId = genreId;
-    }
+    public BookGenre() {}
 
     public int getBookId() {
         return bookId;

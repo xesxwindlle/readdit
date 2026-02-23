@@ -13,10 +13,7 @@ public class BookAuthor {
 
     private int authorId;
 
-    public BookAuthor(int bookId, int authorId) {
-        this.bookId = bookId;
-        this.authorId = authorId;
-    }
+    public BookAuthor() {}
 
     public int getBookId() {
         return bookId;
