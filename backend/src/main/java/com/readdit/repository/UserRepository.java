@@ -20,9 +20,9 @@ public class UserRepository {
     public int insert(User user) {
         String sql = """
                     INSERT INTO user (first_name, last_name, middle_name, display_name,
-                        email, password, avatar_url, bio, created_at, updated_at, last_login_at)
+                        email, password, avatar_url, bio, created_at, updated_at, role)
                     VALUES (:firstName, :lastName, :middleName, :displayName,
-                        :email, :password, :avatarUrl, :bio, :createdAt, :updatedAt, :lastLoginAt)
+                        :email, :password, :avatarUrl, :bio, :createdAt, :updatedAt, :role)
                 """;
 
         MapSqlParameterSource params = new MapSqlParameterSource()
@@ -36,7 +36,7 @@ public class UserRepository {
                 .addValue("bio", user.getBio())
                 .addValue("createdAt", user.getCreatedAt())
                 .addValue("updatedAt", user.getUpdatedAt())
-                .addValue("lastLoginAt", user.getLastLoginAt());
+                .addValue("role", user.getRole());
 
         return jdbc.update(sql, params);
     }
@@ -54,7 +54,7 @@ public class UserRepository {
                         bio = :bio,
                         created_at = :createdAt,
                         updated_at = :updatedAt,
-                        last_login_at = :lastLoginAt
+                        role = :role
                     WHERE id = :id
                 """;
 
@@ -69,7 +69,7 @@ public class UserRepository {
                 .addValue("bio", user.getBio())
                 .addValue("createdAt", user.getCreatedAt())
                 .addValue("updatedAt", user.getUpdatedAt())
-                .addValue("lastLoginAt", user.getLastLoginAt())
+                .addValue("role", user.getRole())
                 .addValue("id", user.getId());
 
         return jdbc.update(sql, params);

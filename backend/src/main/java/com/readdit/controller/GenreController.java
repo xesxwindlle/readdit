@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.readdit.dto.request.GenreRequest;
 import com.readdit.model.Genre;
 import com.readdit.service.GenreService;
 
@@ -26,13 +27,13 @@ public class GenreController {
     public GenreService gnrSrvc;
 
     @PostMapping
-    public ResponseEntity<Genre> post(@RequestBody Genre req) {
+    public ResponseEntity<Genre> post(@RequestBody GenreRequest req) {
         Genre resp = gnrSrvc.insert(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PutMapping("/{genreId}")
-    public ResponseEntity<Genre> put(@PathVariable int genreId, @RequestBody Genre req) {
+    public ResponseEntity<Genre> put(@PathVariable int genreId, @RequestBody GenreRequest req) {
         Genre resp = gnrSrvc.update(genreId, req);
         return ResponseEntity.status(HttpStatus.OK).body(resp);
     }

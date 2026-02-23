@@ -42,8 +42,8 @@ public class UserService {
             existing.setCreatedAt(user.getCreatedAt());
         if (user.getUpdatedAt() != null)
             existing.setUpdatedAt(user.getUpdatedAt());
-        if (user.getLastLoginAt() != null)
-            existing.setLastLoginAt(user.getLastLoginAt());
+        if (user.getRole() != null && !user.getRole().isEmpty())
+            existing.setRole(user.getRole());
 
         userRepository.update(existing);
         return existing;
