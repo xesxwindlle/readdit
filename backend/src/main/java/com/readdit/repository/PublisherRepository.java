@@ -17,7 +17,7 @@ public class PublisherRepository {
     @Autowired
     NamedParameterJdbcTemplate jdbc;
 
-    public int insert(Publisher pblshr) {
+    public Publisher insert(Publisher pblshr) {
         String sql = """
                     INSERT INTO publisher (id, name)
                     VALUES (:id, :name)
@@ -26,7 +26,8 @@ public class PublisherRepository {
         MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("name", pblshr.getName())
                 .addValue("id", pblshr.getId());
-        return jdbc.update(sql, params);
+        jdbc.update(sql, params);
+        return pblshr;
     }
 
     public int update(Publisher pblshr) {

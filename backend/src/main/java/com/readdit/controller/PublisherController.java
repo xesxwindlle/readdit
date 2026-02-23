@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.readdit.dto.request.PublisherRequest;
 import com.readdit.model.Publisher;
 import com.readdit.service.PublisherService;
 
@@ -25,7 +26,7 @@ public class PublisherController {
     public PublisherService pblshrSrvc;
 
     @PostMapping
-    public ResponseEntity<Publisher> post(@RequestBody Publisher req) {
+    public ResponseEntity<Publisher> post(@RequestBody PublisherRequest req) {
         Publisher resp = pblshrSrvc.insert(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.readdit.dto.request.PublisherRequest;
 import com.readdit.model.Publisher;
 import com.readdit.repository.PublisherRepository;
 
@@ -14,9 +15,8 @@ public class PublisherService {
     @Autowired
     public PublisherRepository pblshrRepo;
 
-    public Publisher insert(Publisher pblshr) {
-        pblshrRepo.insert(pblshr);
-        return pblshr;
+    public Publisher insert(PublisherRequest req) {
+        return pblshrRepo.insert(req.toPublisher());
     }
 
     public Publisher update(String publisherId, Publisher pblshr) {
