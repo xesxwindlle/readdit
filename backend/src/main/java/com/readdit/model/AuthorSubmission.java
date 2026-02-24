@@ -11,25 +11,36 @@ public class AuthorSubmission {
 
     @Id
     private int id;
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
 
-    // Submission meta
-    private Integer authorId;         // null = new author, non-null = edit to existing
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
+ 
+    private Integer authorId; 
+
+    private String authorName;
+
+    private Date dateOfBirth;
+
+    private Date dateOfDeath;
+
+    private String authorImageUrl;
+
+    private String biography;       
+
     private int submitterId;
+
     private String submitterComment;
+
     private Integer reviewerId;
+
     private String reviewerComment;
+
     private Timestamp reviewedAt;
+
     private String reviewStatus;
 
-    // Author data carried in the submission
-    private String authorName;
-    private Date dateOfBirth;
-    private Date dateOfDeath;
-    private String authorImageUrl;
-    private String biography;
-
+    
     public AuthorSubmission() {}
 
     public int getId() { return id; }

@@ -1,6 +1,7 @@
 package com.readdit.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,13 @@ import org.springframework.stereotype.Service;
 
 import com.readdit.dto.request.AuthorSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
+import com.readdit.dto.response.AuthorSubmissionResponse;
 import com.readdit.model.Author;
 import com.readdit.model.AuthorSubmission;
+import com.readdit.model.User;
 import com.readdit.repository.AuthorRepository;
 import com.readdit.repository.AuthorSubmissionRepository;
+import com.readdit.repository.UserRepository;
 import com.readdit.util.RegexHelper;
 
 @Service
@@ -21,13 +25,19 @@ public class AuthorSubmissionService {
     private AuthorSubmissionRepository submissionRepo;
 
     @Autowired
+    private UserRepository usrRepo;
+
+    @Autowired
     private AuthorRepository authorRepo;
 
-    public AuthorSubmission submit(AuthorSubmissionRequest req) {
-        return submissionRepo.save(req.toAuthorSubmission());
+    public AuthorSubmissionResponse submit(AuthorSubmissionRequest req) {
+        AuthorSubmission sub = submissionRepo.save(req.toAuthorSubmission());
+        User submitter = usrRepo.getById(sub.getSubmitterId());
+        User reviewer = sub.getReviewerId() != null ? usrRepo.getById(sub.getReviewerId()) : null;
+        return AuthorSubmissionResponse.fromAuthorSubmission(sub, submitter, reviewer);
     }
 
-    public AuthorSubmission review(int submissionId, ReviewRequest req) {
+    public AuthorSubmissionResponse review(int submissionId, ReviewRequest req) {
         AuthorSubmission submission = submissionRepo.findById(submissionId).orElse(new AuthorSubmission());
 
         submission.setReviewerId(req.getReviewerId());
@@ -61,19 +71,43 @@ public class AuthorSubmissionService {
         }
 
         submissionRepo.save(submission);
-        return submission;
+        // return submission;
+
+        User submitter = usrRepo.getById(submission.getSubmitterId());
+        User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
+        return AuthorSubmissionResponse.fromAuthorSubmission(submission, submitter, reviewer);
     }
 
-    public AuthorSubmission getById(int id) {
-        return submissionRepo.findById(id).orElse(new AuthorSubmission());
+    public AuthorSubmissionResponse getById(int id) {
+        // return submissionRepo.findById(id).orElse(new AuthorSubmission());
+        AuthorSubmission submission = submissionRepo.findById(id).orElse(new AuthorSubmission());
+        User submitter = usrRepo.getById(submission.getSubmitterId());
+        User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
+        return AuthorSubmissionResponse.fromAuthorSubmission(submission, submitter, reviewer);
     }
 
-    public List<AuthorSubmission> getAll() {
-        return submissionRepo.findAll();
+    public List<AuthorSubmissionResponse> getAll() {
+        // return submissionRepo.findAll();
+        List<AuthorSubmissionResponse> resp = new ArrayList<>();
+        List<AuthorSubmission> submissions = submissionRepo.findAll();
+        for (AuthorSubmission submission : submissions) {
+            User submitter = usrRepo.getById(submission.getSubmitterId());
+            User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
+            resp.add(AuthorSubmissionResponse.fromAuthorSubmission(submission, submitter, reviewer));
+        }
+        return resp;
     }
 
-    public List<AuthorSubmission> getByReviewStatus(String status) {
-        return submissionRepo.findByReviewStatus(status);
+    public List<AuthorSubmissionResponse> getByReviewStatus(String status) {
+        // return submissionRepo.findByReviewStatus(status);
+        List<AuthorSubmissionResponse> resp = new ArrayList<>();
+        List<AuthorSubmission> submissions = submissionRepo.findByReviewStatus(status);
+        for (AuthorSubmission submission : submissions) {
+            User submitter = usrRepo.getById(submission.getSubmitterId());
+            User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
+            resp.add(AuthorSubmissionResponse.fromAuthorSubmission(submission, submitter, reviewer));
+        }
+        return resp;
     }
 
     public void deleteById(int id) {
