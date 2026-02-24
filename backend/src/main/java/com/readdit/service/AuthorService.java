@@ -40,9 +40,6 @@ public class AuthorService {
             existing.setImageUrl(athr.getImageUrl());
         if (athr.getBiography() != null && !athr.getBiography().isEmpty())
             existing.setBiography(athr.getBiography());
-        if (athr.getReviewStatus() != null && !athr.getReviewStatus().isEmpty())
-            existing.setReviewStatus(athr.getReviewStatus());
-
         athrRepo.update(existing);
         return existing;
     }
@@ -54,7 +51,6 @@ public class AuthorService {
         existing.setDateOfDeath(athr.getDateOfDeath());
         existing.setImageUrl(athr.getImageUrl());
         existing.setBiography(athr.getBiography());
-        existing.setReviewStatus(athr.getReviewStatus());
         athrRepo.update(existing);
         return existing;
     }

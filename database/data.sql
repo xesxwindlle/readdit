@@ -29,27 +29,27 @@ INSERT INTO `user` (first_name, middle_name, last_name, display_name, email, pas
 -- ----------------------
 -- Authors
 -- ----------------------
-INSERT INTO author (slug, review_status, name, date_of_birth, date_of_death, image_url, biography) VALUES
-('1-craig-walls',               'approved', 'Craig Walls',              '1967-03-15', NULL, NULL, 'Craig Walls is a software developer and author best known for Spring in Action.'),
-('2-tom-white',                 'approved', 'Tom White',                '1974-06-22', NULL, NULL, 'Tom White is an engineer at Cloudera and author of Hadoop: The Definitive Guide.'),
-('3-john-resig',                'approved', 'John Resig',               '1984-08-28', NULL, NULL, 'John Resig is the creator of jQuery and a JavaScript evangelist.'),
-('4-bear-bibeault',             'approved', 'Bear Bibeault',            NULL,         NULL, NULL, 'Bear Bibeault is a web developer and co-author of Secrets of the JavaScript Ninja.'),
-('5-rod-johnson',               'approved', 'Rod Johnson',              '1970-01-01', NULL, NULL, 'Rod Johnson is the founder of the Spring Framework and former CEO of SpringSource.'),
-('6-christian-bauer',           'approved', 'Christian Bauer',          NULL,         NULL, NULL, 'Christian Bauer is a core Hibernate developer and co-author of Java Persistence with Hibernate.'),
-('7-gavin-king',                'approved', 'Gavin King',               '1974-01-01', NULL, NULL, 'Gavin King is the creator of Hibernate and a key contributor to the Java EE platform.'),
-('8-douglas-crockford',         'approved', 'Douglas Crockford',        '1955-05-15', NULL, NULL, 'Douglas Crockford is the inventor of JSON and author of JavaScript: The Good Parts.'),
-('9-jesse-james-garrett',       'approved', 'Jesse James Garrett',      '1968-01-01', NULL, NULL, 'Jesse James Garrett coined the term Ajax and authored The Elements of User Experience.'),
-('10-matsumoto-yukihiro',       'approved', '松本行弘',                  '1965-04-14', NULL, NULL, 'Yukihiro Matsumoto, known as Matz, is the creator of the Ruby programming language.'),
-('11-sam-ruby',                 'approved', 'Sam Ruby',                 NULL,         NULL, NULL, 'Sam Ruby is an IBM software engineer and co-author of Agile Web Development with Rails.'),
-('12-dave-thomas',              'approved', 'Dave Thomas',              NULL,         NULL, NULL, 'Dave Thomas is a programmer and co-author of The Pragmatic Programmer and Agile Web Development with Rails.'),
-('13-david-heinemeier-hansson', 'approved', 'David Heinemeier Hansson', '1979-10-15', NULL, NULL, 'David Heinemeier Hansson is the creator of Ruby on Rails and co-founder of Basecamp.'),
-('14-james-gosling',            'approved', 'James Gosling',            '1955-05-19', NULL, NULL, 'James Gosling is the father of the Java programming language.'),
-('15-bill-joy',                 'approved', 'Bill Joy',                 '1954-11-08', NULL, NULL, 'Bill Joy is a co-founder of Sun Microsystems and co-author of The Java Language Specification.'),
-('16-guy-steele',               'approved', 'Guy L. Steele Jr.',        '1954-10-02', NULL, NULL, 'Guy L. Steele Jr. is a computer scientist and co-author of The Java Language Specification.'),
-('17-gilad-bracha',             'approved', 'Gilad Bracha',             NULL,         NULL, NULL, 'Gilad Bracha is a programming language researcher and co-author of The Java Language Specification.'),
-('18-alex-buckley',             'approved', 'Alex Buckley',             NULL,         NULL, NULL, 'Alex Buckley is the specification lead for the Java programming language at Oracle.'),
-('19-kathy-sierra',             'approved', 'Kathy Sierra',             NULL,         NULL, NULL, 'Kathy Sierra is an American programming instructor and game developer, co-author of Head First Java.'),
-('20-bert-bates',               'approved', 'Bert Bates',               NULL,         NULL, NULL, 'Bert Bates is a software developer and co-author of Head First Java.');
+INSERT INTO author (slug, name, date_of_birth, date_of_death, image_url, biography) VALUES
+('1-craig-walls',               'Craig Walls',              '1967-03-15', NULL, NULL, 'Craig Walls is a software developer and author best known for Spring in Action.'),
+('2-tom-white',                 'Tom White',                '1974-06-22', NULL, NULL, 'Tom White is an engineer at Cloudera and author of Hadoop: The Definitive Guide.'),
+('3-john-resig',                'John Resig',               '1984-08-28', NULL, NULL, 'John Resig is the creator of jQuery and a JavaScript evangelist.'),
+('4-bear-bibeault',             'Bear Bibeault',            NULL,         NULL, NULL, 'Bear Bibeault is a web developer and co-author of Secrets of the JavaScript Ninja.'),
+('5-rod-johnson',               'Rod Johnson',              '1970-01-01', NULL, NULL, 'Rod Johnson is the founder of the Spring Framework and former CEO of SpringSource.'),
+('6-christian-bauer',           'Christian Bauer',          NULL,         NULL, NULL, 'Christian Bauer is a core Hibernate developer and co-author of Java Persistence with Hibernate.'),
+('7-gavin-king',                'Gavin King',               '1974-01-01', NULL, NULL, 'Gavin King is the creator of Hibernate and a key contributor to the Java EE platform.'),
+('8-douglas-crockford',         'Douglas Crockford',        '1955-05-15', NULL, NULL, 'Douglas Crockford is the inventor of JSON and author of JavaScript: The Good Parts.'),
+('9-jesse-james-garrett',       'Jesse James Garrett',      '1968-01-01', NULL, NULL, 'Jesse James Garrett coined the term Ajax and authored The Elements of User Experience.'),
+('10-matsumoto-yukihiro',       '松本行弘',                  '1965-04-14', NULL, NULL, 'Yukihiro Matsumoto, known as Matz, is the creator of the Ruby programming language.'),
+('11-sam-ruby',                 'Sam Ruby',                 NULL,         NULL, NULL, 'Sam Ruby is an IBM software engineer and co-author of Agile Web Development with Rails.'),
+('12-dave-thomas',              'Dave Thomas',              NULL,         NULL, NULL, 'Dave Thomas is a programmer and co-author of The Pragmatic Programmer and Agile Web Development with Rails.'),
+('13-david-heinemeier-hansson', 'David Heinemeier Hansson', '1979-10-15', NULL, NULL, 'David Heinemeier Hansson is the creator of Ruby on Rails and co-founder of Basecamp.'),
+('14-james-gosling',            'James Gosling',            '1955-05-19', NULL, NULL, 'James Gosling is the father of the Java programming language.'),
+('15-bill-joy',                 'Bill Joy',                 '1954-11-08', NULL, NULL, 'Bill Joy is a co-founder of Sun Microsystems and co-author of The Java Language Specification.'),
+('16-guy-steele',               'Guy L. Steele Jr.',        '1954-10-02', NULL, NULL, 'Guy L. Steele Jr. is a computer scientist and co-author of The Java Language Specification.'),
+('17-gilad-bracha',             'Gilad Bracha',             NULL,         NULL, NULL, 'Gilad Bracha is a programming language researcher and co-author of The Java Language Specification.'),
+('18-alex-buckley',             'Alex Buckley',             NULL,         NULL, NULL, 'Alex Buckley is the specification lead for the Java programming language at Oracle.'),
+('19-kathy-sierra',             'Kathy Sierra',             NULL,         NULL, NULL, 'Kathy Sierra is an American programming instructor and game developer, co-author of Head First Java.'),
+('20-bert-bates',               'Bert Bates',               NULL,         NULL, NULL, 'Bert Bates is a software developer and co-author of Head First Java.');
 
 -- ----------------------
 -- Genres

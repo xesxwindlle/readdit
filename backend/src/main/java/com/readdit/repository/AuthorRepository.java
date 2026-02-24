@@ -56,8 +56,7 @@ public class AuthorRepository {
                     date_of_birth = :dateOfBirth,
                     date_of_death = :dateOfDeath,
                     image_url = :imageUrl,
-                    biography = :biography,
-                    review_status = :reviewStatus
+                    biography = :biography
                 WHERE id = :id
                 """;
         MapSqlParameterSource params = new MapSqlParameterSource()
@@ -66,7 +65,6 @@ public class AuthorRepository {
                 .addValue("dateOfDeath", athr.getDateOfDeath())
                 .addValue("imageUrl", athr.getImageUrl())
                 .addValue("biography", athr.getBiography())
-                .addValue("reviewStatus", athr.getReviewStatus())
                 .addValue("id", athr.getId());
         return jdbc.update(sql, params);
     }

@@ -14,8 +14,6 @@ public class Author {
     private String slug;
     private Timestamp createdAt;
     private Timestamp updatedAt;
-    private String reviewStatus;
-
     private String name;
     private Date dateOfBirth;
     private Date dateOfDeath;
@@ -35,9 +33,6 @@ public class Author {
 
     public Timestamp getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Timestamp updatedAt) { this.updatedAt = updatedAt; }
-
-    public String getReviewStatus() { return reviewStatus; }
-    public void setReviewStatus(String reviewStatus) { this.reviewStatus = reviewStatus; }
 
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }

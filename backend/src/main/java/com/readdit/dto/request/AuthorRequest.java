@@ -11,7 +11,6 @@ public class AuthorRequest {
     private Date dateOfDeath;
     private String imageUrl;
     private String biography;
-    private String reviewStatus;
 
     public AuthorRequest() {}
 
@@ -30,9 +29,6 @@ public class AuthorRequest {
     public String getBiography() { return biography; }
     public void setBiography(String biography) { this.biography = biography; }
 
-    public String getReviewStatus() { return reviewStatus; }
-    public void setReviewStatus(String reviewStatus) { this.reviewStatus = reviewStatus; }
-
     public Author toAuthor() {
         Author author = new Author();
         author.setName(name);
@@ -40,7 +36,6 @@ public class AuthorRequest {
         author.setDateOfDeath(dateOfDeath);
         author.setImageUrl(imageUrl);
         author.setBiography(biography);
-        author.setReviewStatus(reviewStatus);
         return author;
     }
 }

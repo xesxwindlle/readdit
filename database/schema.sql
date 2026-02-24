@@ -40,7 +40,6 @@ CREATE TABLE author (
     slug        VARCHAR(255)  UNIQUE,
     created_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at  TIMESTAMP     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    review_status ENUM('approved', 'pending', 'rejected') DEFAULT 'pending',
 
     -- Author data
     name       VARCHAR(255) NOT NULL,

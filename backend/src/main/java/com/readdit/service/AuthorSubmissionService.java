@@ -23,20 +23,6 @@ public class AuthorSubmissionService {
     @Autowired
     private AuthorRepository authorRepo;
 
-    // public AuthorSubmission submit(AuthorSubmissionRequest req) {
-    //     AuthorSubmission submission = new AuthorSubmission();
-    //     submission.setAuthorId(req.getAuthorId());
-    //     submission.setSubmitterId(req.getSubmitterId());
-    //     submission.setSubmitterComment(req.getSubmitterComment());
-    //     submission.setReviewStatus("pending");
-    //     submission.setAuthorName(req.getAuthorName());
-    //     submission.setDateOfBirth(req.getDateOfBirth());
-    //     submission.setDateOfDeath(req.getDateOfDeath());
-    //     submission.setAuthorImageUrl(req.getAuthorImageUrl());
-    //     submission.setBiography(req.getBiography());
-    //     return submissionRepo.insert(submission);
-    // }
-
     public AuthorSubmission submit(AuthorSubmissionRequest req) {
         return submissionRepo.save(req.toAuthorSubmission());
     }
@@ -58,7 +44,6 @@ public class AuthorSubmissionService {
                 author.setDateOfDeath(submission.getDateOfDeath());
                 author.setImageUrl(submission.getAuthorImageUrl());
                 author.setBiography(submission.getBiography());
-                author.setReviewStatus("approved");
                 authorRepo.insert(author);
                 author.setSlug(RegexHelper.toSlug(author.getName()) + "-" + author.getId());
                 authorRepo.updateSlug(author);
@@ -71,7 +56,6 @@ public class AuthorSubmissionService {
                 existing.setDateOfDeath(submission.getDateOfDeath());
                 existing.setImageUrl(submission.getAuthorImageUrl());
                 existing.setBiography(submission.getBiography());
-                existing.setReviewStatus("approved");
                 authorRepo.update(existing);
             }
         }
