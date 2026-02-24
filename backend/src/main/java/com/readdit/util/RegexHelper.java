@@ -8,6 +8,16 @@ public class RegexHelper {
                 .replaceAll("[^a-z0-9\\s-]", "") // remove special characters
                 .trim() // remove leading/trailing spaces
                 .replaceAll("\\s+", "-"); // replace spaces with dash
+                
+    }
+
+    public static String toSlug(String input, int id) {
+        return input
+                .toLowerCase() // lowercase
+                .replaceAll("[^a-z0-9\\s-]", "") // remove special characters
+                .trim() // remove leading/trailing spaces
+                .replaceAll("\\s+", "-") // replace spaces with dash
+                + "-" + id;
     }
 
     public static int extractDigits(String input) {

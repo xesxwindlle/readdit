@@ -45,7 +45,7 @@ public class AuthorSubmissionService {
                 author.setImageUrl(submission.getAuthorImageUrl());
                 author.setBiography(submission.getBiography());
                 authorRepo.insert(author);
-                author.setSlug(RegexHelper.toSlug(author.getName()) + "-" + author.getId());
+                author.setSlug(RegexHelper.toSlug(author.getName(), author.getId()));
                 authorRepo.updateSlug(author);
                 submission.setAuthorId(author.getId());
             } else {
