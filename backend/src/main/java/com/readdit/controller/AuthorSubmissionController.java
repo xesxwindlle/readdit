@@ -1,6 +1,7 @@
 package com.readdit.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.readdit.dto.request.AuthorSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
 import com.readdit.dto.response.AuthorSubmissionResponse;
+import com.readdit.dto.response.Response;
+import com.readdit.model.Author;
+import com.readdit.service.AuthorService;
 import com.readdit.service.AuthorSubmissionService;
 
 @RestController
@@ -27,11 +31,18 @@ public class AuthorSubmissionController {
     @Autowired
     private AuthorSubmissionService submissionSrvc;
 
+    @Autowired
+    private AuthorService athrSrvc; 
+
     @PostMapping
     @Transactional
-    public ResponseEntity<AuthorSubmissionResponse> submit(@RequestBody AuthorSubmissionRequest req) {
+    public ResponseEntity<Response> submit(@RequestBody 
+        AuthorSubmissionRequest req) {
         AuthorSubmissionResponse resp = submissionSrvc.submit(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+        if (athrSrvc.getByNamePattern(req.getAuthorName())!= null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(Response.warning("Author with simailar naming pattern found. Waiting for attentive review.", resp)); 
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
 
     @PatchMapping("/{submissionId}/review")

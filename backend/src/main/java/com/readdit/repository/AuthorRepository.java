@@ -111,6 +111,28 @@ public class AuthorRepository {
         return results.isEmpty() ? null : results.getFirst();
     }
 
+    public Author getByNamePattern(String name) {
+    String sql = """
+        SELECT *
+        FROM author
+        WHERE name = :name
+        OR name LIKE :pattern
+        """;
+
+    Map<String, Object> params = Map.of(
+        "name", name,
+        "pattern", "%" + name + "%"
+    );
+
+    List<Author> results = jdbc.query(
+        sql,
+        params,
+        new BeanPropertyRowMapper<>(Author.class)
+    );
+
+    return results.isEmpty() ? null : results.get(0);
+}
+
     public List<Author> getAll() {
         String sql = """
                 SELECT *

@@ -73,6 +73,10 @@ public class AuthorService {
         return athrRepo.getBySlug(slug);
     }
 
+    public Author getByNamePattern(String name) {
+        return athrRepo.getByNamePattern(name);
+    }
+
     public List<Author> getAll() {
         return athrRepo.getAll();
     }
