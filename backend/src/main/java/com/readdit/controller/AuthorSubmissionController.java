@@ -32,36 +32,35 @@ public class AuthorSubmissionController {
     private AuthorSubmissionService submissionSrvc;
 
     @Autowired
-    private AuthorService athrSrvc; 
+    private AuthorService athrSrvc;
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Response> submit(@RequestBody 
+    public ResponseEntity<Response> submit(@RequestBody
         AuthorSubmissionRequest req) {
         AuthorSubmissionResponse resp = submissionSrvc.submit(req);
         if (athrSrvc.getByNamePattern(req.getAuthorName())!= null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(Response.warning("Author with simailar naming pattern found. Waiting for attentive review.", resp)); 
+            return ResponseEntity.status(HttpStatus.CREATED).body(Response.warning("Author with simailar naming pattern found. Waiting for attentive review.", resp));
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
 
     @PatchMapping("/{submissionId}/review")
     @Transactional
-    public ResponseEntity<AuthorSubmissionResponse> review(
+    public ResponseEntity<Response> review(
             @PathVariable int submissionId,
             @RequestBody ReviewRequest req) {
         AuthorSubmissionResponse resp = submissionSrvc.review(submissionId, req);
-        return ResponseEntity.status(HttpStatus.OK).body(resp);
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @GetMapping("/{submissionId}")
-    public ResponseEntity<AuthorSubmissionResponse> getById(@PathVariable int submissionId) {
+    public ResponseEntity<Response> getById(@PathVariable int submissionId) {
         AuthorSubmissionResponse resp = submissionSrvc.getById(submissionId);
         if (resp != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(resp);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
         }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping
@@ -80,5 +79,5 @@ public class AuthorSubmissionController {
         submissionSrvc.deleteById(submissionId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-    
+
 }

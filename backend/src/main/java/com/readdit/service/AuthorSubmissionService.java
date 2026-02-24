@@ -81,10 +81,13 @@ public class AuthorSubmissionService {
 
     public AuthorSubmissionResponse getById(int id) {
         // return submissionRepo.findById(id).orElse(new AuthorSubmission());
-        AuthorSubmission submission = submissionRepo.findById(id).orElse(new AuthorSubmission());
-        User submitter = usrRepo.getById(submission.getSubmitterId());
-        User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
-        return AuthorSubmissionResponse.fromAuthorSubmission(submission, submitter, reviewer);
+        AuthorSubmission submission = submissionRepo.findById(id).orElse(null);
+        if (submission != null) {
+            User submitter = usrRepo.getById(submission.getSubmitterId());
+            User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
+            return AuthorSubmissionResponse.fromAuthorSubmission(submission, submitter, reviewer);   
+        }
+        return null;
     }
 
     public List<AuthorSubmissionResponse> getAll() {
