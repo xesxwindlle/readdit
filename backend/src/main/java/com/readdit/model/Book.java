@@ -21,6 +21,8 @@ public class Book {
 
     private byte[] coverImage;
 
+    private String coverUrl;
+
     public int getId() {
         return id;
     }
@@ -85,4 +87,11 @@ public class Book {
         this.slug = slug;
     }
 
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
+    }
 }

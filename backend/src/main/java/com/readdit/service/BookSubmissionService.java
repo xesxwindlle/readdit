@@ -1,6 +1,7 @@
 package com.readdit.service;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,15 @@ import org.springframework.stereotype.Service;
 
 import com.readdit.dto.request.BookSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
+import com.readdit.dto.response.AuthorSubmissionResponse;
+import com.readdit.dto.response.BookSubmissionResponse;
+import com.readdit.model.AuthorSubmission;
 import com.readdit.model.Book;
 import com.readdit.model.BookSubmission;
+import com.readdit.model.User;
 import com.readdit.repository.BookRepository;
 import com.readdit.repository.BookSubmissionRepository;
+import com.readdit.repository.UserRepository;
 import com.readdit.util.RegexHelper;
 
 @Service
@@ -21,28 +27,19 @@ public class BookSubmissionService {
     private BookSubmissionRepository submissionRepo;
 
     @Autowired
+    private UserRepository usrRepo;
+
+    @Autowired
     private BookRepository bookRepo;
 
-    public BookSubmission submit(BookSubmissionRequest req) {
-        Timestamp now = new Timestamp(System.currentTimeMillis());
-        BookSubmission submission = new BookSubmission();
-        submission.setCreatedAt(now);
-        submission.setUpdatedAt(now);
-        submission.setBookId(req.getBookId());
-        submission.setSubmitterId(req.getSubmitterId());
-        submission.setSubmitterComment(req.getSubmitterComment());
-        submission.setReviewStatus("pending");
-        submission.setTitle(req.getTitle());
-        submission.setIsbn(req.getIsbn());
-        submission.setBookDescription(req.getBookDescription());
-        submission.setPublisherId(req.getPublisherId());
-        submission.setReleaseDate(req.getReleaseDate());
-        submission.setCoverUrl(req.getCoverUrl());
-        submission.setCoverImage(req.getCoverImage());
-        return submissionRepo.save(submission);
+    public BookSubmissionResponse submit(BookSubmissionRequest req) {
+        BookSubmission sub = submissionRepo.save(req.toBookSubmission());
+        User submitter = usrRepo.getById(sub.getSubmitterId());
+        User reviewer = usrRepo.getById(sub.getReviewerId());
+        return BookSubmissionResponse.fromBookSubmission(sub, submitter, reviewer);
     }
 
-    public BookSubmission review(int submissionId, ReviewRequest req) {
+    public BookSubmissionResponse review(int submissionId, ReviewRequest req) {
         BookSubmission submission = submissionRepo.findById(submissionId).orElse(new BookSubmission());
 
         submission.setReviewerId(req.getReviewerId());
@@ -59,10 +56,10 @@ public class BookSubmissionService {
                 book.setPublisherId(submission.getPublisherId());
                 book.setReleaseDate(submission.getReleaseDate());
                 book.setCoverImage(submission.getCoverImage());
-                book.setSlug(RegexHelper.toSlug(submission.getTitle()));
+                book.setCoverUrl(submission.getCoverUrl());
                 bookRepo.insert(book);
                 // Update slug to include id suffix for uniqueness
-                book.setSlug(RegexHelper.toSlug(submission.getTitle()) + "-" + book.getId());
+                book.setSlug(RegexHelper.toSlug(submission.getTitle(), book.getId()));
                 bookRepo.update(book.getId(), book);
                 submission.setBookId(book.getId());
             } else {
@@ -74,24 +71,53 @@ public class BookSubmissionService {
                 existing.setReleaseDate(submission.getReleaseDate());
                 if (submission.getCoverImage() != null)
                     existing.setCoverImage(submission.getCoverImage());
+                if (submission.getCoverUrl() != null && !submission.getCoverUrl().isEmpty()) {
+                    existing.setCoverUrl(submission.getCoverUrl());
+                }
                 bookRepo.update(existing.getId(), existing);
             }
         }
-
-        submissionRepo.save(submission);
-        return submission;
+        // submissionRepo.save(submission);
+        // return submission;
+        User submitter = usrRepo.getById(submission.getSubmitterId());
+        User reviewer = usrRepo.getById(submission.getReviewerId());
+        return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer);
     }
 
-    public BookSubmission getById(int id) {
-        return submissionRepo.findById(id).orElse(new BookSubmission());
+    public BookSubmissionResponse getById(int id) {
+        // return submissionRepo.findById(id).orElse(new BookSubmission());
+        BookSubmission submission = submissionRepo.findById(id).orElse(new BookSubmission());
+        User submitter = usrRepo.getById(submission.getSubmitterId());
+        User reviewer = usrRepo.getById(submission.getReviewerId());
+        return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer);
+
     }
 
-    public List<BookSubmission> getAll() {
-        return submissionRepo.findAll();
+    public List<BookSubmissionResponse> getAll() {
+        // return submissionRepo.findAll();
+        List<BookSubmissionResponse> resp = new ArrayList<>();
+        List<BookSubmission> submissions = submissionRepo.findAll();
+        for (BookSubmission submission : submissions) {
+             User submitter = usrRepo.getById(submission.getSubmitterId());
+        User reviewer = usrRepo.getById(submission.getReviewerId());
+            resp.add(BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer));
+        }
+        return resp;
     }
 
-    public List<BookSubmission> getPending() {
-        return submissionRepo.findByReviewStatus("pending");
+    // public List<BookSubmission> getPending() {
+    //     return submissionRepo.findByReviewStatus("pending");
+    // }
+
+     public List<BookSubmissionResponse> getByReviewStatus(String status) {
+        List<BookSubmissionResponse> resp = new ArrayList<>();
+        List<BookSubmission> submissions = submissionRepo.findByReviewStatus(status);
+        for (BookSubmission submission : submissions) {
+            User submitter = usrRepo.getById(submission.getSubmitterId());
+            User reviewer = usrRepo.getById(submission.getReviewerId());
+            resp.add(BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer));
+        }
+        return resp;
     }
 
     public void deleteById(int id) {

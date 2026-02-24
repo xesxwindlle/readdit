@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.readdit.dto.request.BookSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
+import com.readdit.dto.response.BookSubmissionResponse;
 import com.readdit.model.BookSubmission;
 import com.readdit.service.BookSubmissionService;
 
@@ -29,23 +30,23 @@ public class BookSubmissionController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<BookSubmission> submit(@RequestBody BookSubmissionRequest req) {
-        BookSubmission resp = submissionSrvc.submit(req);
+    public ResponseEntity<BookSubmissionResponse> submit(@RequestBody BookSubmissionRequest req) {
+        BookSubmissionResponse resp = submissionSrvc.submit(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(resp);
     }
 
     @PatchMapping("/{submissionId}/review")
     @Transactional
-    public ResponseEntity<BookSubmission> review(
+    public ResponseEntity<BookSubmissionResponse> review(
             @PathVariable int submissionId,
             @RequestBody ReviewRequest req) {
-        BookSubmission resp = submissionSrvc.review(submissionId, req);
+        BookSubmissionResponse resp = submissionSrvc.review(submissionId, req);
         return ResponseEntity.status(HttpStatus.OK).body(resp);
     }
 
     @GetMapping("/{submissionId}")
-    public ResponseEntity<BookSubmission> getById(@PathVariable int submissionId) {
-        BookSubmission resp = submissionSrvc.getById(submissionId);
+    public ResponseEntity<BookSubmissionResponse> getById(@PathVariable int submissionId) {
+        BookSubmissionResponse resp = submissionSrvc.getById(submissionId);
         if (resp != null) {
             return ResponseEntity.status(HttpStatus.OK).body(resp);
         } else {
@@ -54,13 +55,13 @@ public class BookSubmissionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookSubmission>> getAll() {
+    public ResponseEntity<List<BookSubmissionResponse>> getAll() {
         return ResponseEntity.status(HttpStatus.OK).body(submissionSrvc.getAll());
     }
 
-    @GetMapping("/pending")
-    public ResponseEntity<List<BookSubmission>> getPending() {
-        return ResponseEntity.status(HttpStatus.OK).body(submissionSrvc.getPending());
+    @GetMapping("/status/{reviewStatus}")
+    public ResponseEntity<List<BookSubmissionResponse>> getByReviewStatus(@PathVariable String reviewStatus) {
+        return ResponseEntity.status(HttpStatus.OK).body(submissionSrvc.getByReviewStatus(reviewStatus));
     }
 
     @DeleteMapping("/{submissionId}")

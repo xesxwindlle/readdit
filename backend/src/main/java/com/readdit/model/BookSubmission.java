@@ -11,26 +11,39 @@ public class BookSubmission {
 
     @Id
     private int id;
+
     private Timestamp createdAt;
+
     private Timestamp updatedAt;
 
-    // Submission meta
-    private Integer bookId; // null = new book, non-null = edit to existing
+    private Integer bookId; 
+
+    private String title;
+
+    private String isbn;
+
+    private String bookDescription;
+
+    private String publisherId;
+
+    private Date releaseDate;
+
+    private String coverUrl;
+    
+    private byte[] coverImage;
+
     private int submitterId;
+
     private String submitterComment;
+
     private Integer reviewerId;
+
     private String reviewerComment;
+
     private Timestamp reviewedAt;
+
     private String reviewStatus;
 
-    // Book data carried in the submission
-    private String title;
-    private String isbn;
-    private String bookDescription;
-    private String publisherId;
-    private Date releaseDate;
-    private String coverUrl;
-    private byte[] coverImage;
 
     public BookSubmission() {
     }

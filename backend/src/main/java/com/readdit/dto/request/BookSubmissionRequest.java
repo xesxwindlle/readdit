@@ -1,10 +1,12 @@
 package com.readdit.dto.request;
 
 import java.sql.Date;
+import java.sql.Timestamp;
+
+import com.readdit.model.BookSubmission;
 
 public class BookSubmissionRequest {
     
-    private Integer bookId;
     private int submitterId;
     private String submitterComment;
 
@@ -19,8 +21,6 @@ public class BookSubmissionRequest {
 
     public BookSubmissionRequest() {}
 
-    public Integer getBookId() { return bookId; }
-    public void setBookId(Integer bookId) { this.bookId = bookId; }
 
     public int getSubmitterId() { return submitterId; }
     public void setSubmitterId(int submitterId) { this.submitterId = submitterId; }
@@ -48,4 +48,22 @@ public class BookSubmissionRequest {
 
     public byte[] getCoverImage() { return coverImage; }
     public void setCoverImage(byte[] coverImage) { this.coverImage = coverImage; }
+
+     public BookSubmission toBookSubmission() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        BookSubmission submission = new BookSubmission();
+        submission.setCreatedAt(now);
+        submission.setUpdatedAt(now);
+        submission.setSubmitterId(submitterId);
+        submission.setSubmitterComment(submitterComment);
+        // submission.setReviewStatus("pending");
+        submission.setTitle(title);
+        submission.setIsbn(isbn);
+        submission.setBookDescription(bookDescription);
+        submission.setPublisherId(publisherId);
+        submission.setReleaseDate(releaseDate);
+        submission.setCoverUrl(coverUrl);
+        submission.setCoverImage(coverImage);
+        return submission;
+    }
 }

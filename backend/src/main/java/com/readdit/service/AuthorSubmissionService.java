@@ -45,6 +45,7 @@ public class AuthorSubmissionService {
         submission.setReviewStatus(req.getReviewStatus());
         submission.setReviewedAt(new Timestamp(System.currentTimeMillis()));
 
+        
         if ("approved".equals(req.getReviewStatus())) {
             if (submission.getAuthorId() == null) {
                 // New author — create it and link back

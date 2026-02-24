@@ -1,19 +1,16 @@
 package com.readdit.dto.response;
 
-
 import com.readdit.model.AuthorSubmission;
-import com.readdit.model.Book;
-import com.readdit.model.BookReview;
+import com.readdit.model.BookSubmission;
 import com.readdit.model.User;
 
-public class AuthorSubmissionResponse extends AuthorSubmission{
-    
-    
+public class BookSubmissionResponse extends BookSubmission {
+
     private String submitterDisplayName; 
 
     private String reviewerDisplayName; 
     
-    public AuthorSubmissionResponse() {}
+    public BookSubmissionResponse() {}
 
     public String getSubmitterDisplayName() {
         return submitterDisplayName;
@@ -31,18 +28,21 @@ public class AuthorSubmissionResponse extends AuthorSubmission{
         this.reviewerDisplayName = reviewerDisplayName;
     }
 
-     public static AuthorSubmissionResponse fromAuthorSubmission(AuthorSubmission submission, User submitter, User reviewwer) {
-        AuthorSubmissionResponse response = new AuthorSubmissionResponse();
+     public static BookSubmissionResponse fromBookSubmission(BookSubmission submission, User submitter, User reviewwer) {
+        BookSubmissionResponse response = new BookSubmissionResponse();
         response.setId(submission.getId());
         response.setCreatedAt(submission.getCreatedAt());
         response.setUpdatedAt(submission.getUpdatedAt());
-        response.setAuthorId(submission.getAuthorId());
-        response.setAuthorName(submission.getAuthorName());
-        response.setDateOfBirth(submission.getDateOfBirth());
-        response.setDateOfDeath(submission.getDateOfDeath());
-        response.setAuthorImageUrl(submission.getAuthorImageUrl());
-        response.setBiography(submission.getBiography());
-        
+        response.setBookId(submission.getBookId());
+        response.setTitle(submission.getTitle());
+        response.setIsbn(submission.getIsbn());
+        response.setBookDescription(submission.getBookDescription());
+        response.setPublisherId(submission.getPublisherId());
+        response.setSubmitterId(submission.getSubmitterId());
+        response.setReleaseDate(submission.getReleaseDate());
+        response.setCoverUrl(submission.getCoverUrl());
+        response.setCoverImage(submission.getCoverImage());
+
         response.setSubmitterId(submission.getSubmitterId());
         response.setSubmitterDisplayName(submitter.getDisplayName());
         response.setSubmitterComment(submission.getSubmitterComment());
