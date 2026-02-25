@@ -1,7 +1,6 @@
 package com.readdit.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,7 +19,6 @@ import com.readdit.dto.request.AuthorSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
 import com.readdit.dto.response.AuthorSubmissionResponse;
 import com.readdit.dto.response.Response;
-import com.readdit.model.Author;
 import com.readdit.service.AuthorService;
 import com.readdit.service.AuthorSubmissionService;
 
@@ -36,11 +34,11 @@ public class AuthorSubmissionController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Response> submit(@RequestBody
-        AuthorSubmissionRequest req) {
+    public ResponseEntity<Response> submit(@RequestBody AuthorSubmissionRequest req) {
         AuthorSubmissionResponse resp = submissionSrvc.submit(req);
-        if (athrSrvc.getByNamePattern(req.getAuthorName())!= null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(Response.warning("Author with simailar naming pattern found. Waiting for attentive review.", resp));
+        if (athrSrvc.getByNamePattern(req.getAuthorName()) != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    Response.warning("Author with simailar naming pattern found. Waiting for attentive review.", resp));
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
@@ -60,7 +58,8 @@ public class AuthorSubmissionController {
         if (resp != null) {
             return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        // return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.error("Content not found"));
     }
 
     @GetMapping
@@ -76,8 +75,10 @@ public class AuthorSubmissionController {
     @DeleteMapping("/{submissionId}")
     @Transactional
     public ResponseEntity<Void> deleteById(@PathVariable int submissionId) {
-        submissionSrvc.deleteById(submissionId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        if (submissionSrvc.getById(submissionId) != null) {
+            submissionSrvc.deleteById(submissionId);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
-
 }
