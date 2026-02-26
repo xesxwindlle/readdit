@@ -42,7 +42,8 @@ public class AuthorSubmissionController {
     @Transactional
     public ResponseEntity<Response> review(
             @PathVariable int submissionId,
-            @Valid @RequestBody ReviewRequest req) {
+            @Valid 
+            @RequestBody ReviewRequest req) {
         AuthorSubmissionResponse resp = submissionSrvc.review(submissionId, req);
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
