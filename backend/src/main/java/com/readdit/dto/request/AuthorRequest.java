@@ -2,14 +2,27 @@ package com.readdit.dto.request;
 
 import java.sql.Date;
 
+import org.hibernate.validator.constraints.URL;
+
 import com.readdit.model.Author;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
 
 public class AuthorRequest {
 
+    @NotBlank
     private String name;
+
+    @PastOrPresent
     private Date dateOfBirth;
+
+    @PastOrPresent
     private Date dateOfDeath;
+
+    @URL
     private String imageUrl;
+    
     private String biography;
 
     public AuthorRequest() {}

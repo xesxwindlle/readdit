@@ -3,42 +3,39 @@ package com.readdit.dto.request;
 import java.sql.Date;
 import java.sql.Timestamp;
 
+import org.hibernate.validator.constraints.URL;
+
 import com.readdit.model.AuthorSubmission;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import lombok.Data;
+
+@Data
 public class AuthorSubmissionRequest {
 
+    @Positive
     private int submitterId;
+
     private String submitterComment;
 
     // Author data
+    @NotBlank
     private String authorName;
+
+    @PastOrPresent
     private Date dateOfBirth;
+
+    @PastOrPresent
     private Date dateOfDeath;
+
+    @URL
     private String authorImageUrl;
+
     private String biography;
 
     public AuthorSubmissionRequest() {}
-
-    public int getSubmitterId() { return submitterId; }
-    public void setSubmitterId(int submitterId) { this.submitterId = submitterId; }
-
-    public String getSubmitterComment() { return submitterComment; }
-    public void setSubmitterComment(String submitterComment) { this.submitterComment = submitterComment; }
-
-    public String getAuthorName() { return authorName; }
-    public void setAuthorName(String authorName) { this.authorName = authorName; }
-
-    public Date getDateOfBirth() { return dateOfBirth; }
-    public void setDateOfBirth(Date dateOfBirth) { this.dateOfBirth = dateOfBirth; }
-
-    public Date getDateOfDeath() { return dateOfDeath; }
-    public void setDateOfDeath(Date dateOfDeath) { this.dateOfDeath = dateOfDeath; }
-
-    public String getAuthorImageUrl() { return authorImageUrl; }
-    public void setAuthorImageUrl(String authorImageUrl) { this.authorImageUrl = authorImageUrl; }
-
-    public String getBiography() { return biography; }
-    public void setBiography(String biography) { this.biography = biography; }
 
     public AuthorSubmission toAuthorSubmission() {
         Timestamp now = new Timestamp(System.currentTimeMillis());
