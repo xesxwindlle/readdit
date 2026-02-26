@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import com.readdit.dto.request.AuthorSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
 import com.readdit.dto.response.AuthorSubmissionResponse;
@@ -36,10 +37,6 @@ public class AuthorSubmissionController {
     @Transactional
     public ResponseEntity<Response> submit(@RequestBody AuthorSubmissionRequest req) {
         AuthorSubmissionResponse resp = submissionSrvc.submit(req);
-        if (athrSrvc.getByNamePattern(req.getAuthorName()) != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body(
-                    Response.warning("Author with simailar naming pattern found. Waiting for attentive review.", resp));
-        }
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
 
@@ -47,7 +44,7 @@ public class AuthorSubmissionController {
     @Transactional
     public ResponseEntity<Response> review(
             @PathVariable int submissionId,
-            @RequestBody ReviewRequest req) {
+            @Valid @RequestBody ReviewRequest req) {
         AuthorSubmissionResponse resp = submissionSrvc.review(submissionId, req);
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }

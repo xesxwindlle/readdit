@@ -32,6 +32,10 @@ public class AuthorSubmissionService {
     private AuthorRepository authorRepo;
 
     public AuthorSubmissionResponse submit(AuthorSubmissionRequest req) {
+        if (usrRepo.getById(req.getSubmitterId()) == null) {
+            throw new EmptyResultDataAccessException("User ID " + req.getSubmitterId() + " not found", 1);
+        }
+
         AuthorSubmission sub = submissionRepo.save(req.toAuthorSubmission());
         User submitter = usrRepo.getById(sub.getSubmitterId());
         User reviewer = sub.getReviewerId() != null ? usrRepo.getById(sub.getReviewerId()) : null;
@@ -39,15 +43,21 @@ public class AuthorSubmissionService {
     }
 
     public AuthorSubmissionResponse review(int submissionId, ReviewRequest req) {
-        AuthorSubmission submission = submissionRepo.findById(submissionId).orElse(new AuthorSubmission());
+        AuthorSubmission submission = submissionRepo.findById(submissionId).orElse(null);
+        if (submission == null) {
+             throw new EmptyResultDataAccessException("Submission ID " + submissionId + " not found", 1);
+        }
+        if (req.getReviewerId()) {...
+        }
+        if (req.getReviewStatus()) {...}
 
         submission.setReviewerId(req.getReviewerId());
         submission.setReviewerComment(req.getReviewerComment());
-        submission.setReviewStatus(req.getReviewStatus());
+        submission.setReviewStatus(req.getReviewStatus().getValue());
         submission.setReviewedAt(new Timestamp(System.currentTimeMillis()));
 
-        
-        if ("approved".equals(req.getReviewStatus())) {
+
+        if (com.readdit.enums.ReviewStatus.APPROVED == req.getReviewStatus()) {
             if (submission.getAuthorId() == null) {
                 // New author — create it and link back
                 Author author = new Author();
@@ -117,7 +127,7 @@ public class AuthorSubmissionService {
 
     public void deleteById(int id) {
         if (submissionRepo.findById(id).isEmpty()) {
-            throw new EmptyResultDataAccessException(id);
+            throw new EmptyResultDataAccessException("Submission ID " + id + " not found", 1);
         }
         submissionRepo.deleteById(id);
     }

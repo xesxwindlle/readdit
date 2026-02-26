@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.readdit.dto.request.BookSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
-import com.readdit.dto.response.AuthorSubmissionResponse;
 import com.readdit.dto.response.BookSubmissionResponse;
-import com.readdit.model.AuthorSubmission;
 import com.readdit.model.Book;
 import com.readdit.model.BookSubmission;
 import com.readdit.model.User;
@@ -44,10 +42,10 @@ public class BookSubmissionService {
 
         submission.setReviewerId(req.getReviewerId());
         submission.setReviewerComment(req.getReviewerComment());
-        submission.setReviewStatus(req.getReviewStatus());
+        submission.setReviewStatus(req.getReviewStatus().getValue());
         submission.setReviewedAt(new Timestamp(System.currentTimeMillis()));
 
-        if ("approved".equals(req.getReviewStatus())) {
+        if (com.readdit.enums.ReviewStatus.APPROVED == req.getReviewStatus()) {
             if (submission.getBookId() == null) {
                 // New book — create it and link back
                 Book book = new Book();
@@ -91,7 +89,6 @@ public class BookSubmissionService {
         User submitter = usrRepo.getById(submission.getSubmitterId());
         User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
         return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer);
-
     }
 
     public List<BookSubmissionResponse> getAll() {

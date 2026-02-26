@@ -15,10 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import com.readdit.dto.request.BookSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
 import com.readdit.dto.response.BookSubmissionResponse;
-import com.readdit.model.BookSubmission;
+import com.readdit.dto.response.Response;
 import com.readdit.service.BookSubmissionService;
 
 @RestController
@@ -30,28 +31,27 @@ public class BookSubmissionController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<BookSubmissionResponse> submit(@RequestBody BookSubmissionRequest req) {
+    public ResponseEntity<Response> submit(@RequestBody BookSubmissionRequest req) {
         BookSubmissionResponse resp = submissionSrvc.submit(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
 
     @PatchMapping("/{submissionId}/review")
     @Transactional
-    public ResponseEntity<BookSubmissionResponse> review(
+    public ResponseEntity<Response> review(
             @PathVariable int submissionId,
-            @RequestBody ReviewRequest req) {
+            @Valid @RequestBody ReviewRequest req) {
         BookSubmissionResponse resp = submissionSrvc.review(submissionId, req);
-        return ResponseEntity.status(HttpStatus.OK).body(resp);
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @GetMapping("/{submissionId}")
-    public ResponseEntity<BookSubmissionResponse> getById(@PathVariable int submissionId) {
+    public ResponseEntity<Response> getById(@PathVariable int submissionId) {
         BookSubmissionResponse resp = submissionSrvc.getById(submissionId);
         if (resp != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(resp);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
         }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.error("Content not found"));
     }
 
     @GetMapping
