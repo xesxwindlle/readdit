@@ -34,7 +34,7 @@ public class AuthorSubmissionService {
 
     public AuthorSubmissionResponse submit(AuthorSubmissionRequest req) {
         if (usrRepo.getById(req.getSubmitterId()) == null) {
-            throw new EmptyResultDataAccessException("User ID " + req.getSubmitterId() + " not found", 1);
+            throw new EmptyResultDataAccessException("User with " + req.getSubmitterId() + " not found", 1);
         }
 
         AuthorSubmission sub = submissionRepo.save(req.toAuthorSubmission());
@@ -45,9 +45,9 @@ public class AuthorSubmissionService {
 
     public AuthorSubmissionResponse review(int submissionId, ReviewRequest req) {
         AuthorSubmission submission = submissionRepo.findById(submissionId)
-            .orElseThrow(() -> new EmptyResultDataAccessException("Submission ID " + submissionId + " not found", 1));
+            .orElseThrow(() -> new EmptyResultDataAccessException("Submission with id " + submissionId + " not found", 1));
         if (usrRepo.getById(req.getReviewerId()) == null) {
-            throw new EmptyResultDataAccessException("User ID " + req.getReviewerId() + " not found", 1);
+            throw new EmptyResultDataAccessException("User with id " + req.getReviewerId() + " not found", 1);
         }
 
         submission.setReviewerId(req.getReviewerId());
@@ -121,7 +121,7 @@ public class AuthorSubmissionService {
 
     public void deleteById(int id) {
         submissionRepo.findById(id)
-            .orElseThrow(() -> new EmptyResultDataAccessException("Submission ID " + id + " not found", 1));
+            .orElseThrow(() -> new EmptyResultDataAccessException("Submission with id " + id + " not found", 1));
         submissionRepo.deleteById(id);
     }
 }
