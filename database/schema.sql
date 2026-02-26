@@ -85,7 +85,7 @@ CREATE TABLE author_submission (
     reviewer_id INT,
     reviewer_comment TEXT,
     reviewed_at TIMESTAMP,
-    review_status ENUM('approved', 'pending', 'rejected') NOT NULL DEFAULT 'pending',
+    review_status ENUM('approved', 'pending', 'rejected') DEFAULT 'pending',
 
     -- Author data
     author_name VARCHAR(255) NOT NULL,
@@ -116,7 +116,7 @@ CREATE TABLE book_submission (
     reviewer_id INT,
     reviewer_comment TEXT,
     reviewed_at TIMESTAMP,
-    review_status ENUM('approved', 'pending', 'rejected') NOT NULL DEFAULT 'pending',
+    review_status ENUM('approved', 'pending', 'rejected') DEFAULT 'pending',
 
     -- Book data
     title VARCHAR(255) NOT NULL,
