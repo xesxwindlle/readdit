@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
+import com.readdit.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.readdit.dto.request.AuthorSubmissionRequest;
@@ -34,7 +34,7 @@ public class AuthorSubmissionService {
 
     public AuthorSubmissionResponse submit(AuthorSubmissionRequest req) {
         if (usrRepo.getById(req.getSubmitterId()) == null) {
-            throw new EmptyResultDataAccessException("User with " + req.getSubmitterId() + " not found", 1);
+            throw new ResourceNotFoundException("User with id " + req.getSubmitterId() + " not found");
         }
 
         AuthorSubmission sub = submissionRepo.save(req.toAuthorSubmission());
@@ -45,9 +45,9 @@ public class AuthorSubmissionService {
 
     public AuthorSubmissionResponse review(int submissionId, ReviewRequest req) {
         AuthorSubmission submission = submissionRepo.findById(submissionId)
-            .orElseThrow(() -> new EmptyResultDataAccessException("Submission with id " + submissionId + " not found", 1));
+            .orElseThrow(() -> new ResourceNotFoundException("Submission with id " + submissionId + " not found"));
         if (usrRepo.getById(req.getReviewerId()) == null) {
-            throw new EmptyResultDataAccessException("User with id " + req.getReviewerId() + " not found", 1);
+            throw new ResourceNotFoundException("User with id " + req.getReviewerId() + " not found");
         }
 
         submission.setReviewerId(req.getReviewerId());
@@ -121,7 +121,7 @@ public class AuthorSubmissionService {
 
     public void deleteById(int id) {
         submissionRepo.findById(id)
-            .orElseThrow(() -> new EmptyResultDataAccessException("Submission with id " + id + " not found", 1));
+            .orElseThrow(() -> new ResourceNotFoundException("Submission with id " + id + " not found"));
         submissionRepo.deleteById(id);
     }
 }

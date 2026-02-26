@@ -39,9 +39,19 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.error(e.getMessage()));
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Response> handleResourceNotFound(ResourceNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.error(e.getMessage()));
+    }
+
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<Response> handleDuplicate(DuplicateKeyException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Response.error("Duplicate entry"));
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException.class)
+    public ResponseEntity<Response> handleResourceAlreadyExists(ResourceAlreadyExistsException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(Response.error(e.getMessage()));
     }
 
     @ExceptionHandler(Exception.class)
