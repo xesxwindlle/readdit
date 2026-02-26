@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.validation.Valid;
 import com.readdit.dto.request.AuthorSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
 import com.readdit.dto.response.AuthorSubmissionResponse;
 import com.readdit.dto.response.Response;
 import com.readdit.enums.ReviewStatus;
-import com.readdit.service.AuthorService;
 import com.readdit.service.AuthorSubmissionService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/author-submissions")
@@ -31,12 +31,9 @@ public class AuthorSubmissionController {
     @Autowired
     private AuthorSubmissionService submissionSrvc;
 
-    @Autowired
-    private AuthorService athrSrvc;
-
     @PostMapping
     @Transactional
-    public ResponseEntity<Response> submit(@RequestBody AuthorSubmissionRequest req) {
+    public ResponseEntity<Response> submit(@Valid @RequestBody AuthorSubmissionRequest req) {
         AuthorSubmissionResponse resp = submissionSrvc.submit(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
