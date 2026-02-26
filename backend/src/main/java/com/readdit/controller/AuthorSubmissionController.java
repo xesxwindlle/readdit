@@ -42,8 +42,7 @@ public class AuthorSubmissionController {
     @Transactional
     public ResponseEntity<Response> review(
             @PathVariable int submissionId,
-            @Valid 
-            @RequestBody ReviewRequest req) {
+            @Valid @RequestBody ReviewRequest req) {
         AuthorSubmissionResponse resp = submissionSrvc.review(submissionId, req);
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
@@ -54,7 +53,8 @@ public class AuthorSubmissionController {
         if (resp != null) {
             return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.error("Submission with ID " + submissionId + " not found"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Response.error("Submission with ID " + submissionId + " not found"));
     }
 
     @GetMapping
