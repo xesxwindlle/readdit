@@ -41,6 +41,7 @@ public class BookSubmissionRequest {
 
     @Size(max = 5 * 1024 * 1024, 
           message = "Cover image must be less than 5MB") 
+          
     private byte[] coverImage;
 
     public BookSubmissionRequest() {}
