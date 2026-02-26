@@ -130,6 +130,21 @@ public class BookRepository {
         return results.isEmpty() ? null : results.getFirst();
     }
 
+    public Book getByIsbn(String isbn) {
+        String sql = """
+            SELECT *
+            FROM book
+            WHERE isbn = :isbn
+        """;
+
+        List<Book> results = jdbc.query(
+            sql,
+            Map.of("isbn", isbn),
+            new BeanPropertyRowMapper<>(Book.class)
+        );
+        return results.isEmpty() ? null : results.getFirst();
+    }
+
     public List<Book> listTopNPricedBook(int n) {
         String sql = """
             SELECT *

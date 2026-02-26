@@ -5,11 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.readdit.dto.request.BookSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
 import com.readdit.dto.response.BookSubmissionResponse;
+import com.readdit.enums.ReviewStatus;
 import com.readdit.model.Book;
 import com.readdit.model.BookSubmission;
 import com.readdit.model.User;
@@ -31,6 +34,14 @@ public class BookSubmissionService {
     private BookRepository bookRepo;
 
     public BookSubmissionResponse submit(BookSubmissionRequest req) {
+        if (usrRepo.getById(req.getSubmitterId()) == null) {
+            throw new EmptyResultDataAccessException("User with " + req.getSubmitterId() + " not found", 1);
+        }
+
+        if (bookRepo.getByIsbn(req.getIsbn()) != null) {
+            throw new DuplicateKeyException("Book with ISBN " + req.getIsbn() + " alrady exists");
+        }
+
         BookSubmission sub = submissionRepo.save(req.toBookSubmission());
         User submitter = usrRepo.getById(sub.getSubmitterId());
         User reviewer = sub.getReviewerId() != null ? usrRepo.getById(sub.getReviewerId()) : null;
@@ -38,14 +49,18 @@ public class BookSubmissionService {
     }
 
     public BookSubmissionResponse review(int submissionId, ReviewRequest req) {
-        BookSubmission submission = submissionRepo.findById(submissionId).orElse(new BookSubmission());
+        BookSubmission submission = submissionRepo.findById(submissionId)
+            .orElseThrow(() -> new EmptyResultDataAccessException("Submission with id " + submissionId + " not found", 1));
+        if (usrRepo.getById(req.getReviewerId()) == null) {
+            throw new EmptyResultDataAccessException("User with id " + req.getReviewerId() + " not found", 1);
+        }
 
         submission.setReviewerId(req.getReviewerId());
         submission.setReviewerComment(req.getReviewerComment());
         submission.setReviewStatus(req.getReviewStatus().getValue());
         submission.setReviewedAt(new Timestamp(System.currentTimeMillis()));
 
-        if (com.readdit.enums.ReviewStatus.APPROVED == req.getReviewStatus()) {
+        if (ReviewStatus.APPROVED == req.getReviewStatus()) {
             if (submission.getBookId() == null) {
                 // New book — create it and link back
                 Book book = new Book();
@@ -84,15 +99,16 @@ public class BookSubmissionService {
     }
 
     public BookSubmissionResponse getById(int id) {
-        // return submissionRepo.findById(id).orElse(new BookSubmission());
-        BookSubmission submission = submissionRepo.findById(id).orElse(new BookSubmission());
-        User submitter = usrRepo.getById(submission.getSubmitterId());
-        User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
-        return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer);
+        BookSubmission submission = submissionRepo.findById(id).orElse(null);
+        if (submission != null){
+            User submitter = usrRepo.getById(submission.getSubmitterId());
+            User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
+            return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer);
+        }
+        return null;
     }
 
     public List<BookSubmissionResponse> getAll() {
-        // return submissionRepo.findAll();
         List<BookSubmissionResponse> resp = new ArrayList<>();
         List<BookSubmission> submissions = submissionRepo.findAll();
         for (BookSubmission submission : submissions) {
@@ -103,13 +119,9 @@ public class BookSubmissionService {
         return resp;
     }
 
-    // public List<BookSubmission> getPending() {
-    //     return submissionRepo.findByReviewStatus("pending");
-    // }
-
-     public List<BookSubmissionResponse> getByReviewStatus(String status) {
+     public List<BookSubmissionResponse> getByReviewStatus(ReviewStatus status) {
         List<BookSubmissionResponse> resp = new ArrayList<>();
-        List<BookSubmission> submissions = submissionRepo.findByReviewStatus(status);
+        List<BookSubmission> submissions = submissionRepo.findByReviewStatus(status.getValue());
         for (BookSubmission submission : submissions) {
             User submitter = usrRepo.getById(submission.getSubmitterId());
             User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
@@ -119,6 +131,8 @@ public class BookSubmissionService {
     }
 
     public void deleteById(int id) {
+        submissionRepo.findById(id)
+            .orElseThrow(() -> new EmptyResultDataAccessException("Submission with id " + id + " not found", 1));
         submissionRepo.deleteById(id);
     }
 }

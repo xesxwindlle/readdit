@@ -20,6 +20,7 @@ import com.readdit.dto.request.BookSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
 import com.readdit.dto.response.BookSubmissionResponse;
 import com.readdit.dto.response.Response;
+import com.readdit.enums.ReviewStatus;
 import com.readdit.service.BookSubmissionService;
 
 @RestController
@@ -31,7 +32,7 @@ public class BookSubmissionController {
 
     @PostMapping
     @Transactional
-    public ResponseEntity<Response> submit(@RequestBody BookSubmissionRequest req) {
+    public ResponseEntity<Response> submit(@Valid @RequestBody BookSubmissionRequest req) {
         BookSubmissionResponse resp = submissionSrvc.submit(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
@@ -51,23 +52,25 @@ public class BookSubmissionController {
         if (resp != null) {
             return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.error("Content not found"));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.error("Submission with ID " + submissionId + " not found"));
     }
 
     @GetMapping
-    public ResponseEntity<List<BookSubmissionResponse>> getAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(submissionSrvc.getAll());
+    public ResponseEntity<Response> getAll() {
+        List<BookSubmissionResponse>  resp =  submissionSrvc.getAll();
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @GetMapping("/status/{reviewStatus}")
-    public ResponseEntity<List<BookSubmissionResponse>> getByReviewStatus(@PathVariable String reviewStatus) {
-        return ResponseEntity.status(HttpStatus.OK).body(submissionSrvc.getByReviewStatus(reviewStatus));
+    public ResponseEntity<Response> getByReviewStatus(@PathVariable String reviewStatus) {
+        List<BookSubmissionResponse> resp = submissionSrvc.getByReviewStatus(ReviewStatus.fromValue(reviewStatus));
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @DeleteMapping("/{submissionId}")
     @Transactional
     public ResponseEntity<Void> deleteById(@PathVariable int submissionId) {
-        submissionSrvc.deleteById(submissionId);
+         submissionSrvc.deleteById(submissionId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
