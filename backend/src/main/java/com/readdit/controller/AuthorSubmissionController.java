@@ -20,6 +20,7 @@ import com.readdit.dto.request.AuthorSubmissionRequest;
 import com.readdit.dto.request.ReviewRequest;
 import com.readdit.dto.response.AuthorSubmissionResponse;
 import com.readdit.dto.response.Response;
+import com.readdit.enums.ReviewStatus;
 import com.readdit.service.AuthorService;
 import com.readdit.service.AuthorSubmissionService;
 
@@ -55,7 +56,6 @@ public class AuthorSubmissionController {
         if (resp != null) {
             return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
         }
-        // return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.error("Content not found"));
     }
 
@@ -67,7 +67,7 @@ public class AuthorSubmissionController {
 
     @GetMapping("/status/{reviewStatus}")
     public ResponseEntity<Response> getByReviewStatus(@PathVariable String reviewStatus) {
-        List<AuthorSubmissionResponse> resp = submissionSrvc.getByReviewStatus(reviewStatus);
+        List<AuthorSubmissionResponse> resp = submissionSrvc.getByReviewStatus(ReviewStatus.fromValue(reviewStatus));
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 

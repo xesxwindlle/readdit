@@ -19,6 +19,11 @@ public class GlobalExceptionHandler {
             .body(Response.error(e.getMostSpecificCause().getMessage()));
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<Response> handleIllegalArgument(IllegalArgumentException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Response.error(e.getMessage()));
+    }
+
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public ResponseEntity<Response> handleNotFound(EmptyResultDataAccessException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.error(e.getMessage()));
