@@ -21,7 +21,7 @@ public enum ReviewStatus {
 
     @JsonCreator
     public static ReviewStatus fromValue(String value) {
-        if (value == null) return null;
+        if (value == null) throw new IllegalArgumentException("reviewStatus is required");
         for (ReviewStatus status : values()) {
             if (status.value.equalsIgnoreCase(value)) {
                 return status;

@@ -5,6 +5,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -17,6 +18,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Response> handleUnreadable(HttpMessageNotReadableException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
             .body(Response.error(e.getMostSpecificCause().getMessage()));
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Response> handleValidation(MethodArgumentNotValidException e) {
+        String message = e.getBindingResult().getFieldErrors().stream()
+            .map(err -> err.getField() + ": " + err.getDefaultMessage())
+            .findFirst()
+            .orElse("Validation failed");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Response.error(message));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
@@ -36,7 +46,9 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Response> handleGeneral(Exception e) {
+        Throwable root = e;
+        while (root.getCause() != null) root = root.getCause();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(Response.error ("Something went wrong: " + e.getMessage()));
+            .body(Response.error("Something went wrong: " + root.getMessage()));
     }
 }
