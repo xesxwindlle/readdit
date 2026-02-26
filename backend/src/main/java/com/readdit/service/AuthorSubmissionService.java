@@ -47,9 +47,9 @@ public class AuthorSubmissionService {
         if (submission == null) {
              throw new EmptyResultDataAccessException("Submission ID " + submissionId + " not found", 1);
         }
-        if (req.getReviewerId()) {...
+        if (usrRepo.getById(req.getReviewerId()) == null) {
+            throw new EmptyResultDataAccessException("User ID " + req.getReviewerId() + " not found", 1);
         }
-        if (req.getReviewStatus()) {...}
 
         submission.setReviewerId(req.getReviewerId());
         submission.setReviewerComment(req.getReviewerComment());
