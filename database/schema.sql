@@ -63,7 +63,7 @@ CREATE TABLE book (
   id INT AUTO_INCREMENT PRIMARY KEY,
   isbn VARCHAR(13),
   title VARCHAR(100) NOT NULL,
-  slug VARCHAR(150) NOT NULL UNIQUE,
+  slug VARCHAR(150) UNIQUE,
   release_date TIMESTAMP,
   price DECIMAL(6,2),
   publisher_id VARCHAR(10) NOT NULL,
