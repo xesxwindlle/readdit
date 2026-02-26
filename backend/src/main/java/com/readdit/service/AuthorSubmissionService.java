@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import com.readdit.dto.request.AuthorSubmissionRequest;
@@ -115,6 +116,9 @@ public class AuthorSubmissionService {
     }
 
     public void deleteById(int id) {
+        if (submissionRepo.findById(id).isEmpty()) {
+            throw new EmptyResultDataAccessException(id);
+        }
         submissionRepo.deleteById(id);
     }
 }

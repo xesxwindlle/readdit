@@ -63,22 +63,21 @@ public class AuthorSubmissionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AuthorSubmissionResponse>> getAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(submissionSrvc.getAll());
+    public ResponseEntity<Response> getAll() {
+        List<AuthorSubmissionResponse> resp = submissionSrvc.getAll();
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @GetMapping("/status/{reviewStatus}")
-    public ResponseEntity<List<AuthorSubmissionResponse>> getByReviewStatus(@PathVariable String reviewStatus) {
-        return ResponseEntity.status(HttpStatus.OK).body(submissionSrvc.getByReviewStatus(reviewStatus));
+    public ResponseEntity<Response> getByReviewStatus(@PathVariable String reviewStatus) {
+        List<AuthorSubmissionResponse> resp = submissionSrvc.getByReviewStatus(reviewStatus);
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @DeleteMapping("/{submissionId}")
     @Transactional
     public ResponseEntity<Void> deleteById(@PathVariable int submissionId) {
-        if (submissionSrvc.getById(submissionId) != null) {
-            submissionSrvc.deleteById(submissionId);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        submissionSrvc.deleteById(submissionId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
