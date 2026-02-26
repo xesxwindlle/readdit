@@ -6,91 +6,46 @@ import java.util.List;
 
 import com.readdit.model.Book;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import lombok.Data;
+
+@Data
 public class BookRequest {
 
+    @NotBlank
     private String isbn;
+
+    @NotBlank
     private String title;
+
     private String slug;
+    
+    @NotBlank
     private String publisherId;
+
+    @PastOrPresent
     private Date releaseDate;
+
+    @Positive
     private double price;
+
+    @Size(max = 5 * 1024 * 1024, 
+          message = "Cover image must be less than 5MB") 
     private byte[] coverImage;
-    private List<Integer> authorIds = new ArrayList<>();
-    private List<Integer> genreIds = new ArrayList<>();
+
+    private List<@NotNull(message = "Author ID cannot be null")
+                 @Positive(message = "Invalid Author not valid")
+                Integer> authorIds = new ArrayList<>();
+
+    private List<@NotNull(message = "Author ID cannot be null")
+                 @Positive(message = "Invalid Author not valid")
+                Integer> genreIds = new ArrayList<>();
 
     public BookRequest() {}
-
-    public String getIsbn() {
-        return isbn;
-    }
-
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
-    }
-
-    public String getPublisherId() {
-        return publisherId;
-    }
-
-    public void setPublisherId(String publisherId) {
-        this.publisherId = publisherId;
-    }
-
-    public Date getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(Date releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public byte[] getCoverImage() {
-        return coverImage;
-    }
-
-    public void setCoverImage(byte[] coverImage) {
-        this.coverImage = coverImage;
-    }
-
-    public List<Integer> getAuthorIds() {
-        return authorIds;
-    }
-
-    public void setAuthorIds(List<Integer> authorIds) {
-        this.authorIds = authorIds;
-    }
-
-    public List<Integer> getGenreIds() {
-        return genreIds;
-    }
-
-    public void setGenreIds(List<Integer> genreIds) {
-        this.genreIds = genreIds;
-    }
 
     public Book toBook() {
         Book book = new Book();
