@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.readdit.dto.response.Response;
 import com.readdit.model.User;
 import com.readdit.service.UserService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -26,15 +29,19 @@ public class UserController {
     private UserService usrSrvc;
 
     @PostMapping
-    public ResponseEntity<User> post(@RequestBody User req) {
+    public ResponseEntity<Response> create(@Valid @RequestBody User req) {
         User resp = usrSrvc.insert(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<User> put(@PathVariable int userId, @RequestBody User req) {
-        User resp = usrSrvc.update(userId, req);
-        return ResponseEntity.status(HttpStatus.OK).body(resp);
+    public ResponseEntity<Response> update(
+        @PathVariable int userId, 
+        @Valid
+        @RequestBody
+        User req) {
+    User resp = usrSrvc.update(userId, req);
+    return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @DeleteMapping("/{userId}")
@@ -48,9 +55,8 @@ public class UserController {
         User resp = usrSrvc.getById(userId);
         if (resp != null) {
             return ResponseEntity.status(HttpStatus.OK).body(resp);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
     @GetMapping
