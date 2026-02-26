@@ -35,7 +35,7 @@ public class BookSubmissionService {
     public BookSubmissionResponse submit(BookSubmissionRequest req) {
         BookSubmission sub = submissionRepo.save(req.toBookSubmission());
         User submitter = usrRepo.getById(sub.getSubmitterId());
-        User reviewer = usrRepo.getById(sub.getReviewerId());
+        User reviewer = sub.getReviewerId() != null ? usrRepo.getById(sub.getReviewerId()) : null;
         return BookSubmissionResponse.fromBookSubmission(sub, submitter, reviewer);
     }
 
@@ -77,10 +77,11 @@ public class BookSubmissionService {
                 bookRepo.update(existing.getId(), existing);
             }
         }
-        // submissionRepo.save(submission);
+
+        submissionRepo.save(submission);
         // return submission;
         User submitter = usrRepo.getById(submission.getSubmitterId());
-        User reviewer = usrRepo.getById(submission.getReviewerId());
+        User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
         return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer);
     }
 
@@ -88,7 +89,7 @@ public class BookSubmissionService {
         // return submissionRepo.findById(id).orElse(new BookSubmission());
         BookSubmission submission = submissionRepo.findById(id).orElse(new BookSubmission());
         User submitter = usrRepo.getById(submission.getSubmitterId());
-        User reviewer = usrRepo.getById(submission.getReviewerId());
+        User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
         return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer);
 
     }
@@ -98,8 +99,8 @@ public class BookSubmissionService {
         List<BookSubmissionResponse> resp = new ArrayList<>();
         List<BookSubmission> submissions = submissionRepo.findAll();
         for (BookSubmission submission : submissions) {
-             User submitter = usrRepo.getById(submission.getSubmitterId());
-        User reviewer = usrRepo.getById(submission.getReviewerId());
+        User submitter = usrRepo.getById(submission.getSubmitterId());
+        User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
             resp.add(BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer));
         }
         return resp;
@@ -114,7 +115,7 @@ public class BookSubmissionService {
         List<BookSubmission> submissions = submissionRepo.findByReviewStatus(status);
         for (BookSubmission submission : submissions) {
             User submitter = usrRepo.getById(submission.getSubmitterId());
-            User reviewer = usrRepo.getById(submission.getReviewerId());
+            User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
             resp.add(BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer));
         }
         return resp;
