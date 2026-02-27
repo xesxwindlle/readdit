@@ -1,11 +1,13 @@
 package com.readdit.service;
 
+import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.readdit.dto.request.UserRequest;
+import com.readdit.enums.Role;
 import com.readdit.exception.ResourceAlreadyExistsException;
 import com.readdit.exception.ResourceNotFoundException;
 import com.readdit.model.User;
@@ -17,7 +19,7 @@ public class UserService {
     @Autowired
     public UserRepository userRepository;
 
-    public User insert(UserRequest req) {
+    public User create(UserRequest req) {
         if (userRepository.getByEmail(req.getEmail()) != null) {
             throw new ResourceAlreadyExistsException("User with email " + req.getEmail() + " already exists");
         }
@@ -30,32 +32,65 @@ public class UserService {
         return resp;
     }
 
-    public User update(int userId, User user) {
+    public User update(int userId, UserRequest req) {
         User existing = userRepository.getById(userId);
+        if (existing == null) {
+            throw new ResourceNotFoundException("User with id " + userId + " not found");
+        }
 
-        if (user.getFirstName() != null && !user.getFirstName().isEmpty())
-            existing.setFirstName(user.getFirstName());
-        if (user.getLastName() != null && !user.getLastName().isEmpty())
-            existing.setLastName(user.getLastName());
-        if (user.getMiddleName() != null && !user.getMiddleName().isEmpty())
-            existing.setMiddleName(user.getMiddleName());
-        if (user.getDisplayName() != null && !user.getDisplayName().isEmpty())
-            existing.setDisplayName(user.getDisplayName());
-        if (user.getEmail() != null && !user.getEmail().isEmpty())
-            existing.setEmail(user.getEmail());
-        if (user.getPassword() != null && !user.getPassword().isEmpty())
-            existing.setPassword(user.getPassword());
-        if (user.getAvatarUrl() != null && !user.getAvatarUrl().isEmpty())
-            existing.setAvatarUrl(user.getAvatarUrl());
-        if (user.getBio() != null && !user.getBio().isEmpty())
-            existing.setBio(user.getBio());
-        if (user.getCreatedAt() != null)
-            existing.setCreatedAt(user.getCreatedAt());
-        if (user.getUpdatedAt() != null)
-            existing.setUpdatedAt(user.getUpdatedAt());
-        if (user.getRole() != null && !user.getRole().isEmpty())
-            existing.setRole(user.getRole());
+        existing.setFirstName(req.getFirstName());
+        existing.setLastName(req.getLastName());
+        existing.setMiddleName(req.getMiddleName());
+        existing.setDisplayName(req.getDisplayName());
+        existing.setEmail(req.getEmail());
+        existing.setPassword(req.getPassword());
+        existing.setAvatarUrl(req.getAvatarUrl());
+        existing.setBio(req.getBio());
 
+        //set to be informative to the client side
+        existing.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        userRepository.update(existing);
+        return existing;
+    }
+
+    public User patch(int userId, UserRequest req) {
+        User existing = userRepository.getById(userId);
+        if (existing == null) {
+            throw new ResourceNotFoundException("User with id " + userId + " not found");
+        }
+
+        if (req.getFirstName() != null && !req.getFirstName().isEmpty())
+            existing.setFirstName(req.getFirstName());
+        if (req.getLastName() != null && !req.getLastName().isEmpty())
+            existing.setLastName(req.getLastName());
+        if (req.getMiddleName() != null && !req.getMiddleName().isEmpty())
+            existing.setMiddleName(req.getMiddleName());
+        if (req.getDisplayName() != null && !req.getDisplayName().isEmpty())
+            existing.setDisplayName(req.getDisplayName());
+        if (req.getEmail() != null && !req.getEmail().isEmpty())
+            existing.setEmail(req.getEmail());
+        if (req.getPassword() != null && !req.getPassword().isEmpty())
+            existing.setPassword(req.getPassword());
+        if (req.getAvatarUrl() != null && !req.getAvatarUrl().isEmpty())
+            existing.setAvatarUrl(req.getAvatarUrl());
+        if (req.getBio() != null && !req.getBio().isEmpty())
+            existing.setBio(req.getBio());
+
+        //set to be informative to the client side
+        existing.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+
+        userRepository.update(existing);
+        return existing;
+    }
+
+    public User updateRole(int userId, Role role) {
+        User existing = userRepository.getById(userId);
+        if (existing == null) {
+            throw new ResourceNotFoundException("User with id " + userId + " not found");
+        }
+        existing.setRole(role.getValue());
+        existing.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         userRepository.update(existing);
         return existing;
     }
