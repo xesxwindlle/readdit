@@ -8,13 +8,13 @@ USE readdit;
 -- Publishers
 -- ----------------------
 INSERT INTO publisher VALUES
-('MP', 'Manning Publication'),
-('OA', 'O''Reilly & Associates'),
-('WP', 'Wrox Press'),
-('NR', 'New Riders'),
-('GI', 'Gotop Information'),
-('PB', 'Pragmatic Bookshelf'),
-('AW', 'Addison Wesley');
+('manning-publication',      'Manning Publication'),
+('oreilly-and-associates',   'O''Reilly & Associates'),
+('wrox-press',               'Wrox Press'),
+('new-riders',               'New Riders'),
+('gotop-information',        'Gotop Information'),
+('pragmatic-bookshelf',      'Pragmatic Bookshelf'),
+('addison-wesley',           'Addison Wesley');
 
 -- ----------------------
 -- Users
@@ -70,17 +70,17 @@ INSERT INTO genre (name, slug) VALUES
 -- Books (cover_image loaded separately)
 -- ----------------------
 INSERT INTO book (isbn, title, slug, release_date, price, publisher_id, cover_image) VALUES
-('161729120X', 'Spring in Action, 4/e',                         'spring-in-action-4e-1',                                      '2014-11-27', 5.00,  'MP', NULL),
-('1491901632', 'Hadoop: The Definitive Guide, 4/e',             'hadoop-the-definitive-guide-4e-2',                           '2015-04-10', 4.00,  'OA', NULL),
-('193398869X', 'Secrets of the JavaScript Ninja',               'secrets-of-the-javascript-ninja-3',                          '2012-12-27', 7.00,  'MP', NULL),
-('0764543857', 'Expert One-on-One J2EE Design and Development', 'expert-one-on-one-j2ee-design-and-development-4',            '2002-09-30', 3.00,  'WP', NULL),
-('1932394885', 'Java Persistence with Hibernate',               'java-persistence-with-hibernate-5',                          '2006-11-23', 7.00,  'MP', NULL),
-('0596517742', 'JavaScript: The Good Parts',                    'javascript-the-good-parts-6',                                '2008-05-30', 2.00,  'OA', NULL),
-('0321683684', 'The Elements of User Experience',               'the-elements-of-user-experience-7',                          '2010-12-25', 10.00, 'NR', NULL),
-('9863473316', '松本行弘談程式世界的未來',                       'matsumoto-yukihiro-talks-about-the-future-of-programming-8', '2014-10-30', 8.00,  'GI', NULL),
-('1937785564', 'Agile Web Development with Rails 4',            'agile-web-development-with-rails-4-9',                       '2013-10-07', 7.45,  'PB', NULL),
-('013390069X', 'The Java Language Specification, Java SE 8',   'the-java-language-specification-java-se-8-10',               '2014-05-15', 9.99,  'AW', NULL),
-('0596009208', 'Head First Java, 2/e',                         'head-first-java-2e-11',                                      '2005-02-09', 6.50,  'OA', NULL);
+('161729120X', 'Spring in Action, 4/e',                         'spring-in-action-4e-1',                                      '2014-11-27', 5.00,  'manning-publication',    NULL),
+('1491901632', 'Hadoop: The Definitive Guide, 4/e',             'hadoop-the-definitive-guide-4e-2',                           '2015-04-10', 4.00,  'oreilly-and-associates', NULL),
+('193398869X', 'Secrets of the JavaScript Ninja',               'secrets-of-the-javascript-ninja-3',                          '2012-12-27', 7.00,  'manning-publication',    NULL),
+('0764543857', 'Expert One-on-One J2EE Design and Development', 'expert-one-on-one-j2ee-design-and-development-4',            '2002-09-30', 3.00,  'wrox-press',             NULL),
+('1932394885', 'Java Persistence with Hibernate',               'java-persistence-with-hibernate-5',                          '2006-11-23', 7.00,  'manning-publication',    NULL),
+('0596517742', 'JavaScript: The Good Parts',                    'javascript-the-good-parts-6',                                '2008-05-30', 2.00,  'oreilly-and-associates', NULL),
+('0321683684', 'The Elements of User Experience',               'the-elements-of-user-experience-7',                          '2010-12-25', 10.00, 'new-riders',             NULL),
+('9863473316', '松本行弘談程式世界的未來',                       'matsumoto-yukihiro-talks-about-the-future-of-programming-8', '2014-10-30', 8.00,  'gotop-information',      NULL),
+('1937785564', 'Agile Web Development with Rails 4',            'agile-web-development-with-rails-4-9',                       '2013-10-07', 7.45,  'pragmatic-bookshelf',    NULL),
+('013390069X', 'The Java Language Specification, Java SE 8',   'the-java-language-specification-java-se-8-10',               '2014-05-15', 9.99,  'addison-wesley',         NULL),
+('0596009208', 'Head First Java, 2/e',                         'head-first-java-2e-11',                                      '2005-02-09', 6.50,  'oreilly-and-associates', NULL);
 
 -- ----------------------
 -- Book <-> Author
@@ -149,25 +149,25 @@ INSERT INTO author_submission (author_id, submitter_id, submitter_comment, revie
 INSERT INTO book_submission (book_id, submitter_id, submitter_comment, reviewer_id, reviewer_comment, reviewed_at, review_status, title, isbn, book_description, publisher_id, release_date, cover_url, cover_image) VALUES
 -- New book (book_id NULL = not in the system yet), pending review
 (NULL, 2, 'This book is missing from the catalog.', NULL, NULL, NULL, 'pending',
- 'Clean Code', '9780132350884', 'A handbook of agile software craftsmanship by Robert C. Martin.', 'AW', '2008-08-01', NULL, NULL),
+ 'Clean Code', '9780132350884', 'A handbook of agile software craftsmanship by Robert C. Martin.', 'addison-wesley', '2008-08-01', NULL, NULL),
 -- Edit to existing book (Spring in Action, id=1), approved
 (1, 1, 'Updating description for Spring in Action.', 3, 'Approved, information verified.', '2026-02-18 09:00:00', 'approved',
- 'Spring in Action, 4/e', '161729120X', 'A comprehensive guide to the Spring Framework covering Spring MVC, Spring Boot, and more.', 'MP', '2014-11-27', NULL, NULL),
+ 'Spring in Action, 4/e', '161729120X', 'A comprehensive guide to the Spring Framework covering Spring MVC, Spring Boot, and more.', 'manning-publication', '2014-11-27', NULL, NULL),
 -- New book submission, rejected
 (NULL, 4, 'Adding a book I read recently.', 3, 'Could not verify ISBN or publisher details.', '2026-02-19 11:30:00', 'rejected',
- 'Some Random Book', NULL, NULL, 'OA', NULL, NULL, NULL);
+ 'Some Random Book', NULL, NULL, 'oreilly-and-associates', NULL, NULL, NULL);
 
 -- ----------------------
 -- Publisher No PK (mirror of publisher)
 -- ----------------------
 INSERT INTO publisher_no_pk VALUES
-('MP', 'Manning Publication'),
-('OA', 'O''Reilly & Associates'),
-('WP', 'Wrox Press'),
-('NR', 'New Riders'),
-('GI', 'Gotop Information'),
-('PB', 'Pragmatic Bookshelf'),
-('AW', 'Addison Wesley');
+('manning-publication',      'Manning Publication'),
+('oreilly-and-associates',   'O''Reilly & Associates'),
+('wrox-press',               'Wrox Press'),
+('new-riders',               'New Riders'),
+('gotop-information',        'Gotop Information'),
+('pragmatic-bookshelf',      'Pragmatic Bookshelf'),
+('addison-wesley',           'Addison Wesley');
 
 -- =============================================
 -- END OF SCRIPT

@@ -12,7 +12,7 @@ CREATE DATABASE `readdit`;
 USE `readdit`;
 
 CREATE TABLE publisher (
-  id VARCHAR(10) PRIMARY KEY,
+  id VARCHAR(100) PRIMARY KEY,
   name VARCHAR(50) NOT NULL
 );
 
@@ -66,7 +66,7 @@ CREATE TABLE book (
   slug VARCHAR(150) UNIQUE,
   release_date TIMESTAMP,
   price DECIMAL(6,2),
-  publisher_id VARCHAR(10) NOT NULL,
+  publisher_id VARCHAR(100) NOT NULL,
   cover_image BLOB,
   CONSTRAINT fk_book_publisher FOREIGN KEY (publisher_id)
       REFERENCES publisher (id)
@@ -122,7 +122,7 @@ CREATE TABLE book_submission (
     title VARCHAR(255) NOT NULL,
     isbn VARCHAR(13),
     book_description TEXT,
-    publisher_id VARCHAR(10) NOT NULL, -- No plans to add a dedicated /publisher/ page for now
+    publisher_id VARCHAR(100) NOT NULL, -- No plans to add a dedicated /publisher/ page for now
     release_date DATE,
     cover_url VARCHAR(500),
     cover_image BLOB,
@@ -178,7 +178,7 @@ CREATE TABLE book_author (
 );
 
 CREATE TABLE publisher_no_pk (
-  id VARCHAR(10) NOT NULL,
+  id VARCHAR(100) NOT NULL,
   name VARCHAR(50) NOT NULL
 );
 
