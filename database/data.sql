@@ -20,11 +20,11 @@ INSERT INTO publisher VALUES
 -- Users
 -- ----------------------
 INSERT INTO `user` (first_name, middle_name, last_name, display_name, email, password, avatar_url, bio, role) VALUES
-('Alice', NULL,    'Chen',    'alice_reads',  'alice@example.com', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWX', NULL, 'Avid reader and Java developer.',             'ROLE_USER'),
-('Bob',   'James', 'Smith',   'bookworm_bob', 'bob@example.com',   '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWX', NULL, 'Full-stack developer who loves tech books.',  'ROLE_USER'),
-('Carol', NULL,    'Wang',    'carol_w',      'carol@example.com', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWX', NULL, 'UX designer and occasional writer.',          'ROLE_MODERATOR'),
-('David', 'Lee',   'Kim',     'dave_k',       'david@example.com', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWX', NULL, NULL,                                          'ROLE_USER'),
-('Eve',   NULL,    'Johnson', 'eve_j',        'eve@example.com',   '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWX', NULL, 'Ruby and Rails enthusiast.',                 'ROLE_ADMIN');
+('Alice', NULL,    'Chen',    'alice_reads',  'alice@example.com', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWX', NULL, 'Avid reader and Java developer.',             'USER'),
+('Bob',   'James', 'Smith',   'bookworm_bob', 'bob@example.com',   '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWX', NULL, 'Full-stack developer who loves tech books.',  'USER'),
+('Carol', NULL,    'Wang',    'carol_w',      'carol@example.com', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWX', NULL, 'UX designer and occasional writer.',          'MODERATOR'),
+('David', 'Lee',   'Kim',     'dave_k',       'david@example.com', '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWX', NULL, NULL,                                          'USER'),
+('Eve',   NULL,    'Johnson', 'eve_j',        'eve@example.com',   '$2a$10$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWX', NULL, 'Ruby and Rails enthusiast.',                 'ADMIN');
 
 -- ----------------------
 -- Authors
