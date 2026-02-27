@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import com.readdit.model.User;
@@ -17,7 +18,7 @@ public class UserRepository {
     @Autowired
     private NamedParameterJdbcTemplate jdbc;
 
-    public int insert(User user) {
+    public User insert(User user) {
         String sql = """
                     INSERT INTO user (first_name, last_name, middle_name, display_name,
                         email, password, avatar_url, bio, created_at, updated_at, role)
@@ -38,7 +39,10 @@ public class UserRepository {
                 .addValue("updatedAt", user.getUpdatedAt())
                 .addValue("role", user.getRole());
 
-        return jdbc.update(sql, params);
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbc.update(sql, params, keyHolder);
+        user.setId(keyHolder.getKey().intValue());
+        return user;
     }
 
     public int update(User user) {
@@ -53,8 +57,9 @@ public class UserRepository {
                         avatar_url = :avatarUrl,
                         bio = :bio,
                         created_at = :createdAt,
-                        updated_at = :updatedAt,
+                        updated_at = :updatedAt, 
                         role = :role
+                    
                     WHERE id = :id
                 """;
 
@@ -94,6 +99,34 @@ public class UserRepository {
         List<User> results = jdbc.query(
                 sql,
                 Map.of("id", id),
+                new BeanPropertyRowMapper<>(User.class));
+        return results.isEmpty() ? null : results.getFirst();
+    }
+
+    public User getByEmail(String email) {
+        String sql = """
+                    SELECT *
+                    FROM user
+                    WHERE email = :email
+                """;
+
+        List<User> results = jdbc.query(
+                sql,
+                Map.of("email", email),
+                new BeanPropertyRowMapper<>(User.class));
+        return results.isEmpty() ? null : results.getFirst();
+    }
+
+    public User getByDisplayName(String displayName) {
+        String sql = """
+                    SELECT *
+                    FROM user
+                    WHERE display_name = :displayName
+                """;
+
+        List<User> results = jdbc.query(
+                sql,
+                Map.of("displayName", displayName),
                 new BeanPropertyRowMapper<>(User.class));
         return results.isEmpty() ? null : results.getFirst();
     }

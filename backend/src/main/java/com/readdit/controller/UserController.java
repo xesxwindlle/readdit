@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.readdit.dto.request.UserRequest;
 import com.readdit.dto.response.Response;
 import com.readdit.model.User;
 import com.readdit.service.UserService;
@@ -29,38 +30,38 @@ public class UserController {
     private UserService usrSrvc;
 
     @PostMapping
-    public ResponseEntity<Response> create(@Valid @RequestBody User req) {
+    public ResponseEntity<Response> create(@Valid @RequestBody UserRequest req) {
         User resp = usrSrvc.insert(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
 
-    @PutMapping("/{userId}")
-    public ResponseEntity<Response> update(
-        @PathVariable int userId, 
-        @Valid
-        @RequestBody
-        User req) {
-    User resp = usrSrvc.update(userId, req);
-    return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
-    }
+    // @PutMapping("/{userId}")
+    // public ResponseEntity<Response> update(
+    //     @PathVariable int userId, 
+    //     @Valid
+    //     @RequestBody
+    //     UserRequest req) {
+    // User resp = usrSrvc.update(userId, req);
+    // return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
+    // }
 
-    @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteById(@PathVariable int userId) {
-        usrSrvc.deleteById(userId);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
+    // @DeleteMapping("/{userId}")
+    // public ResponseEntity<Void> deleteById(@PathVariable int userId) {
+    //     usrSrvc.deleteById(userId);
+    //     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    // }
 
-    @GetMapping("/{userId}")
-    public ResponseEntity<User> getById(@PathVariable int userId) {
-        User resp = usrSrvc.getById(userId);
-        if (resp != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(resp);
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
+    // @GetMapping("/{userId}")
+    // public ResponseEntity<User> getById(@PathVariable int userId) {
+    //     User resp = usrSrvc.getById(userId);
+    //     if (resp != null) {
+    //         return ResponseEntity.status(HttpStatus.OK).body(resp);
+    //     }
+    //     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    // }
 
-    @GetMapping
-    public ResponseEntity<List<User>> getAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(usrSrvc.getAll());
-    }
+    // @GetMapping
+    // public ResponseEntity<List<User>> getAll() {
+    //     return ResponseEntity.status(HttpStatus.OK).body(usrSrvc.getAll());
+    // }
 }

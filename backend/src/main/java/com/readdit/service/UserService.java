@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.readdit.dto.request.UserRequest;
+import com.readdit.exception.ResourceAlreadyExistsException;
 import com.readdit.model.User;
 import com.readdit.repository.UserRepository;
 
@@ -14,9 +16,17 @@ public class UserService {
     @Autowired
     public UserRepository userRepository;
 
-    public User insert(User user) {
-        userRepository.insert(user);
-        return user;
+    public User insert(UserRequest req) {
+        if (userRepository.getByEmail(req.getEmail()) != null) {
+            throw new ResourceAlreadyExistsException("User with email " + req.getEmail() + " already exists");
+        }
+
+        if (userRepository.getByDisplayName(req.getDisplayName()) != null) {
+            throw new ResourceAlreadyExistsException("User with display name " + req.getDisplayName() + " already exists");
+        }
+
+        User resp = userRepository.insert(req.toUser());
+        return resp;
     }
 
     public User update(int userId, User user) {

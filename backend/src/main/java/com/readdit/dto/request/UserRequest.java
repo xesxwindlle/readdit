@@ -5,6 +5,10 @@ import java.sql.Timestamp;
 import org.hibernate.validator.constraints.URL;
 import org.hibernate.validator.constraints.UUID;
 
+import com.readdit.enums.Role;
+import com.readdit.model.BookReview;
+import com.readdit.model.User;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -28,7 +32,7 @@ public class UserRequest {
     @Email
     private String email;
 
-    @UUID
+    // @UUID
     private String password;
 
     @URL
@@ -36,14 +40,23 @@ public class UserRequest {
 
     private String bio;
 
-    @PastOrPresent
-    private Timestamp createdAt;
-
-    @PastOrPresent
-    private Timestamp updatedAt;
-
-    @NotNull
-    private String role;
-
     public UserRequest() {};
+
+     public User toUser() {
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+        User usr = new User();
+        usr.setFirstName(firstName);
+        usr.setMiddleName(middleName);
+        usr.setLastName(lastName);
+        usr.setDisplayName(displayName);
+        usr.setEmail(email);
+        usr.setDisplayName(displayName);
+        usr.setPassword(password);
+        usr.setAvatarUrl(avatarUrl);
+        usr.setBio(bio);
+        usr.setCreatedAt(now);
+        usr.setUpdatedAt(now);
+        usr.setRole(Role.USER.getValue());
+        return usr;
+    }
 }
