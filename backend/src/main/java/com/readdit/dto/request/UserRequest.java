@@ -3,16 +3,12 @@ package com.readdit.dto.request;
 import java.sql.Timestamp;
 
 import org.hibernate.validator.constraints.URL;
-import org.hibernate.validator.constraints.UUID;
 
 import com.readdit.enums.Role;
-import com.readdit.model.BookReview;
 import com.readdit.model.User;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import lombok.Data;
 
 @Data
@@ -29,9 +25,11 @@ public class UserRequest {
     @NotBlank
     private String displayName;
 
+    @NotBlank
     @Email
     private String email;
 
+    @NotBlank
     // @UUID
     private String password;
 

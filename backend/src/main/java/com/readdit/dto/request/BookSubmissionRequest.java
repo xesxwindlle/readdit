@@ -25,7 +25,6 @@ public class BookSubmissionRequest {
     @NotBlank
     private String title;
 
-    @NotBlank
     private String isbn;
 
     private String bookDescription;

@@ -16,7 +16,7 @@ import lombok.Data;
 @Data
 public class BookRequest {
 
-    @NotBlank
+    // @NotBlank
     private String isbn;
 
     @NotBlank
