@@ -88,13 +88,11 @@ public class AuthorSubmissionService {
     }
 
     public AuthorSubmissionResponse getById(int id) {
-        AuthorSubmission submission = submissionRepo.findById(id).orElse(null);
-        if (submission != null) {
-            User submitter = usrRepo.getById(submission.getSubmitterId());
-            User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
-            return AuthorSubmissionResponse.fromAuthorSubmission(submission, submitter, reviewer);
-        }
-        return null;
+        AuthorSubmission submission = submissionRepo.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Submission with id " + id + " not found"));
+        User submitter = usrRepo.getById(submission.getSubmitterId());
+        User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
+        return AuthorSubmissionResponse.fromAuthorSubmission(submission, submitter, reviewer);
     }
 
     public List<AuthorSubmissionResponse> getAll() {

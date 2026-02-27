@@ -49,10 +49,7 @@ public class BookSubmissionController {
     @GetMapping("/{submissionId}")
     public ResponseEntity<Response> getById(@PathVariable int submissionId) {
         BookSubmissionResponse resp = submissionSrvc.getById(submissionId);
-        if (resp != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Response.error("Submission with ID " + submissionId + " not found"));
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @GetMapping

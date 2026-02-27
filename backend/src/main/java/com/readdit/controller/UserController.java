@@ -1,7 +1,5 @@
 package com.readdit.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,17 +49,14 @@ public class UserController {
     //     return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     // }
 
-    // @GetMapping("/{userId}")
-    // public ResponseEntity<User> getById(@PathVariable int userId) {
-    //     User resp = usrSrvc.getById(userId);
-    //     if (resp != null) {
-    //         return ResponseEntity.status(HttpStatus.OK).body(resp);
-    //     }
-    //     return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    // }
+    @GetMapping("/{userId}")
+    public ResponseEntity<Response> getById(@PathVariable int userId) {
+        User resp = usrSrvc.getById(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
+    }
 
-    // @GetMapping
-    // public ResponseEntity<List<User>> getAll() {
-    //     return ResponseEntity.status(HttpStatus.OK).body(usrSrvc.getAll());
-    // }
+    @GetMapping
+    public ResponseEntity<Response> getAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(usrSrvc.getAll()));
+    }
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.readdit.dto.request.UserRequest;
 import com.readdit.exception.ResourceAlreadyExistsException;
+import com.readdit.exception.ResourceNotFoundException;
 import com.readdit.model.User;
 import com.readdit.repository.UserRepository;
 
@@ -64,7 +65,11 @@ public class UserService {
     }
 
     public User getById(int id) {
-        return userRepository.getById(id);
+        User usr = userRepository.getById(id);
+        if (usr == null) {
+            throw new ResourceNotFoundException("User with id " + id + " not found");
+        }
+        return usr;
     }
 
     public List<User> getAll() {
