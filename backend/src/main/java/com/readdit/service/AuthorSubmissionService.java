@@ -54,6 +54,7 @@ public class AuthorSubmissionService {
         submission.setReviewerComment(req.getReviewerComment());
         submission.setReviewStatus(req.getReviewStatus().getValue());
         submission.setReviewedAt(new Timestamp(System.currentTimeMillis()));
+        submission.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
         if (ReviewStatus.APPROVED == req.getReviewStatus()) {
             if (submission.getAuthorId() == null) {
