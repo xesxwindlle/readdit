@@ -37,8 +37,8 @@ public class BookSubmissionService {
         if (usrRepo.getById(req.getSubmitterId()) == null) {
             throw new ResourceNotFoundException("User with id " + req.getSubmitterId() + " not found");
         }
-
-        if (bookRepo.getByIsbn(req.getIsbn()) != null) {
+        
+        if (req.getIsbn() != null && bookRepo.getByIsbn(req.getIsbn()) != null) {
             throw new ResourceAlreadyExistsException("Book with ISBN " + req.getIsbn() + " already exists");
         }
 
