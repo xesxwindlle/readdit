@@ -53,7 +53,8 @@ public class BookSubmissionRequest {
         submission.setUpdatedAt(now);
         submission.setSubmitterId(submitterId);
         submission.setSubmitterComment(submitterComment);
-        // submission.setReviewStatus("pending");
+        //CrudRepository requires complete fields. Can't be omitted
+        submission.setReviewStatus("pending");
         submission.setTitle(title);
         submission.setIsbn(isbn);
         submission.setBookDescription(bookDescription);
