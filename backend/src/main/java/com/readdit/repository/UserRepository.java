@@ -21,9 +21,9 @@ public class UserRepository {
     public User insert(User user) {
         String sql = """
                     INSERT INTO user (first_name, last_name, middle_name, display_name,
-                        email, password, avatar_url, bio, created_at, updated_at, role)
+                        email, password, avatar_url, bio, role)
                     VALUES (:firstName, :lastName, :middleName, :displayName,
-                        :email, :password, :avatarUrl, :bio, :createdAt, :updatedAt, :role)
+                        :email, :password, :avatarUrl, :bio, :role)
                 """;
 
         MapSqlParameterSource params = new MapSqlParameterSource()
@@ -35,8 +35,6 @@ public class UserRepository {
                 .addValue("password", user.getPassword())
                 .addValue("avatarUrl", user.getAvatarUrl())
                 .addValue("bio", user.getBio())
-                .addValue("createdAt", user.getCreatedAt())
-                .addValue("updatedAt", user.getUpdatedAt())
                 .addValue("role", user.getRole());
 
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -56,10 +54,8 @@ public class UserRepository {
                         password = :password,
                         avatar_url = :avatarUrl,
                         bio = :bio,
-                        created_at = :createdAt,
-                        updated_at = :updatedAt, 
+                       
                         role = :role
-                    
                     WHERE id = :id
                 """;
 
@@ -72,8 +68,6 @@ public class UserRepository {
                 .addValue("password", user.getPassword())
                 .addValue("avatarUrl", user.getAvatarUrl())
                 .addValue("bio", user.getBio())
-                .addValue("createdAt", user.getCreatedAt())
-                .addValue("updatedAt", user.getUpdatedAt())
                 .addValue("role", user.getRole())
                 .addValue("id", user.getId());
 
