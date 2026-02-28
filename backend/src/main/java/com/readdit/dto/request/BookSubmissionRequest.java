@@ -30,7 +30,7 @@ public class BookSubmissionRequest {
     private String bookDescription;
 
     @NotBlank
-    private String publisherId;
+    private String publisherName;
 
     @PastOrPresent
     private Date releaseDate;
@@ -57,7 +57,7 @@ public class BookSubmissionRequest {
         submission.setTitle(title);
         submission.setIsbn(isbn);
         submission.setBookDescription(bookDescription);
-        submission.setPublisherId(publisherId);
+        submission.setPublisherName(publisherName);
         submission.setReleaseDate(releaseDate);
         submission.setCoverUrl(coverUrl);
         submission.setCoverImage(coverImage);

@@ -24,7 +24,7 @@ public class BookSubmission {
 
     private String bookDescription;
 
-    private String publisherId;
+    private String publisherName;
 
     private Date releaseDate;
 
@@ -152,12 +152,12 @@ public class BookSubmission {
         this.bookDescription = bookDescription;
     }
 
-    public String getPublisherId() {
-        return publisherId;
+    public String getPublisherName() {
+        return publisherName;
     }
 
-    public void setPublisherId(String publisherId) {
-        this.publisherId = publisherId;
+    public void setPublisherName(String publisherName) {
+        this.publisherName = publisherName;
     }
 
     public Date getReleaseDate() {

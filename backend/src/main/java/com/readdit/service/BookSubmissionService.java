@@ -15,9 +15,11 @@ import com.readdit.dto.response.BookSubmissionResponse;
 import com.readdit.enums.ReviewStatus;
 import com.readdit.model.Book;
 import com.readdit.model.BookSubmission;
+import com.readdit.model.Publisher;
 import com.readdit.model.User;
 import com.readdit.repository.BookRepository;
 import com.readdit.repository.BookSubmissionRepository;
+import com.readdit.repository.PublisherRepository;
 import com.readdit.repository.UserRepository;
 import com.readdit.util.RegexHelper;
 
@@ -32,6 +34,9 @@ public class BookSubmissionService {
 
     @Autowired
     private BookRepository bookRepo;
+
+    @Autowired
+    private PublisherRepository publisherRepo;
 
     public BookSubmissionResponse submit(BookSubmissionRequest req) {
         if (usrRepo.getById(req.getSubmitterId()) == null) {
@@ -62,12 +67,21 @@ public class BookSubmissionService {
         submission.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 
         if (ReviewStatus.APPROVED == req.getReviewStatus()) {
+            // Resolve publisher: derive slug from name, create if not exists
+            String publisherId = RegexHelper.toSlug(submission.getPublisherName());
+            if (publisherRepo.getById(publisherId) == null) {
+                Publisher publisher = new Publisher();
+                publisher.setId(publisherId);
+                publisher.setName(submission.getPublisherName());
+                publisherRepo.insert(publisher);
+            }
+
             if (submission.getBookId() == null) {
                 // New book — create it and link back
                 Book book = new Book();
                 book.setTitle(submission.getTitle());
                 book.setIsbn(submission.getIsbn());
-                book.setPublisherId(submission.getPublisherId());
+                book.setPublisherId(publisherId);
                 book.setReleaseDate(submission.getReleaseDate());
                 book.setCoverImage(submission.getCoverImage());
                 book.setCoverUrl(submission.getCoverUrl());
@@ -81,7 +95,7 @@ public class BookSubmissionService {
                 Book existing = bookRepo.getById(submission.getBookId());
                 existing.setTitle(submission.getTitle());
                 existing.setIsbn(submission.getIsbn());
-                existing.setPublisherId(submission.getPublisherId());
+                existing.setPublisherId(publisherId);
                 existing.setReleaseDate(submission.getReleaseDate());
                 if (submission.getCoverImage() != null)
                     existing.setCoverImage(submission.getCoverImage());

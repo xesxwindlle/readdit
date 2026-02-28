@@ -1,6 +1,5 @@
 package com.readdit.dto.response;
 
-import com.readdit.model.AuthorSubmission;
 import com.readdit.model.BookSubmission;
 import com.readdit.model.User;
 
@@ -37,7 +36,7 @@ public class BookSubmissionResponse extends BookSubmission {
         response.setTitle(submission.getTitle());
         response.setIsbn(submission.getIsbn());
         response.setBookDescription(submission.getBookDescription());
-        response.setPublisherId(submission.getPublisherId());
+        response.setPublisherName(submission.getPublisherName());
         response.setSubmitterId(submission.getSubmitterId());
         response.setReleaseDate(submission.getReleaseDate());
         response.setCoverUrl(submission.getCoverUrl());
