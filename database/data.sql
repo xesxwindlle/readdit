@@ -146,16 +146,39 @@ INSERT INTO author_submission (author_id, submitter_id, submitter_comment, revie
 -- ----------------------
 -- Book Submissions
 -- ----------------------
-INSERT INTO book_submission (book_id, submitter_id, submitter_comment, reviewer_id, reviewer_comment, reviewed_at, review_status, title, isbn, book_description, publisher_id, release_date, cover_url, cover_image) VALUES
+INSERT INTO book_submission (book_id, submitter_id, submitter_comment, reviewer_id, reviewer_comment, reviewed_at, review_status, title, isbn, book_description, publisher_name, release_date, cover_url, cover_image) VALUES
 -- New book (book_id NULL = not in the system yet), pending review
 (NULL, 2, 'This book is missing from the catalog.', NULL, NULL, NULL, 'pending',
- 'Clean Code', '9780132350884', 'A handbook of agile software craftsmanship by Robert C. Martin.', 'addison-wesley', '2008-08-01', NULL, NULL),
+ 'Clean Code', '9780132350884', 'A handbook of agile software craftsmanship by Robert C. Martin.', 'Addison Wesley', '2008-08-01', NULL, NULL),
 -- Edit to existing book (Spring in Action, id=1), approved
 (1, 1, 'Updating description for Spring in Action.', 3, 'Approved, information verified.', '2026-02-18 09:00:00', 'approved',
- 'Spring in Action, 4/e', '161729120X', 'A comprehensive guide to the Spring Framework covering Spring MVC, Spring Boot, and more.', 'manning-publication', '2014-11-27', NULL, NULL),
+ 'Spring in Action, 4/e', '161729120X', 'A comprehensive guide to the Spring Framework covering Spring MVC, Spring Boot, and more.', 'Manning Publication', '2014-11-27', NULL, NULL),
 -- New book submission, rejected
 (NULL, 4, 'Adding a book I read recently.', 3, 'Could not verify ISBN or publisher details.', '2026-02-19 11:30:00', 'rejected',
- 'Some Random Book', NULL, NULL, 'oreilly-and-associates', NULL, NULL, NULL);
+ 'Some Random Book', NULL, NULL, 'O''Reilly & Associates', NULL, NULL, NULL);
+
+-- ----------------------
+-- Book Submission <-> Author
+-- ----------------------
+INSERT INTO book_submission_author (submission_id, author_id) VALUES
+-- Clean Code (submission 1): Robert C. Martin not in author table, so no rows here
+-- Spring in Action (submission 2): Craig Walls (author_id=1)
+(2, 1),
+-- Some Random Book (submission 3): no known author
+(3, 8);
+
+-- ----------------------
+-- Book Submission <-> Genre
+-- ----------------------
+INSERT INTO book_submission_genre (submission_id, genre_id) VALUES
+-- Clean Code (submission 1): Programming (1), Software Engineering (6)
+(1, 1),
+(1, 6),
+-- Spring in Action (submission 2): Programming (1), Java (3)
+(2, 1),
+(2, 3),
+-- Some Random Book (submission 3): Programming (1)
+(3, 1);
 
 -- ----------------------
 -- Publisher No PK (mirror of publisher)

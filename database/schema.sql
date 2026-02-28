@@ -122,7 +122,8 @@ CREATE TABLE book_submission (
     title VARCHAR(255) NOT NULL,
     isbn VARCHAR(13),
     book_description TEXT,
-    publisher_id VARCHAR(100) NOT NULL, -- No plans to add a dedicated /publisher/ page for now
+    -- Human-readable name; slug derived on approval. Reuses publisher if slug already exists.
+    publisher_name VARCHAR(255) NOT NULL,
     release_date DATE,
     cover_url VARCHAR(500),
     cover_image BLOB,
@@ -133,9 +134,37 @@ CREATE TABLE book_submission (
     CONSTRAINT fk_book_submission_submitter FOREIGN KEY (submitter_id)
         REFERENCES user(id),
     CONSTRAINT fk_book_submission_reviewer FOREIGN KEY (reviewer_id)
-        REFERENCES user(id),
-    CONSTRAINT fk_book_submission_publisher FOREIGN KEY (publisher_id)
-        REFERENCES publisher(id)
+        REFERENCES user(id)
+);
+
+CREATE TABLE book_submission_author (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    submission_id INT NOT NULL,
+    author_id INT NOT NULL,
+    UNIQUE(submission_id, author_id),
+    CONSTRAINT fk_bksubathr_bksub
+        FOREIGN KEY (submission_id)
+        REFERENCES book_submission(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_bksubathr_athr
+        FOREIGN KEY (author_id)
+        REFERENCES author(id)
+        ON DELETE CASCADE
+);
+
+CREATE TABLE book_submission_genre (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    submission_id INT NOT NULL,
+    genre_id INT NOT NULL,
+    UNIQUE(submission_id, genre_id),
+    CONSTRAINT fk_bksubgnr_bksub
+        FOREIGN KEY (submission_id)
+        REFERENCES book_submission(id)
+        ON DELETE CASCADE,
+    CONSTRAINT fk_bksubgnr_gnr
+        FOREIGN KEY (genre_id)
+        REFERENCES genre(id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE book_review (
