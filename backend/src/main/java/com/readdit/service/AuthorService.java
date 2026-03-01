@@ -5,79 +5,106 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
+
 import com.readdit.dto.request.AuthorRequest;
+import com.readdit.exception.ResourceNotFoundException;
 import com.readdit.model.Author;
 import com.readdit.repository.AuthorRepository;
 import com.readdit.repository.BookAuthorRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.readdit.util.RegexHelper;
 
 @Service
 public class AuthorService {
-    
-    @Autowired 
-    public AuthorRepository athrRepo;
 
     @Autowired
-    public BookAuthorRepository bkAthrRepo;
+    private AuthorRepository authorRepository;
 
-    public Author createAuthor(AuthorRequest req) {
-        Author author = athrRepo.insert(req.toAuthor());
+    @Autowired
+    private BookAuthorRepository bookAuthorRepository;
+
+    @Transactional
+    public Author create(AuthorRequest req) {
+        Author author = authorRepository.insert(req.toAuthor());
         author.setSlug(RegexHelper.toSlug(author.getName()) + "-" + author.getId());
-        athrRepo.updateSlug(author);
+        authorRepository.updateSlug(author);
         return author;
     }
 
-    public Author update(String slug, Author athr) {
-        Author existing = athrRepo.getBySlug(slug);
-
-        if (athr.getName() != null && !athr.getName().isEmpty())
-            existing.setName(athr.getName());
-        if (athr.getDateOfBirth() != null)
-            existing.setDateOfBirth(athr.getDateOfBirth());
-        if (athr.getDateOfDeath() != null)
-            existing.setDateOfDeath(athr.getDateOfDeath());
-        if (athr.getImageUrl() != null && !athr.getImageUrl().isEmpty())
-            existing.setImageUrl(athr.getImageUrl());
-        if (athr.getBiography() != null && !athr.getBiography().isEmpty())
-            existing.setBiography(athr.getBiography());
-        athrRepo.update(existing);
+    @Transactional
+    public Author update(String slug, AuthorRequest req) {
+        Author existing = authorRepository.getBySlug(slug);
+        if (existing == null) {
+            throw new ResourceNotFoundException("Author with slug " + slug + " not found");
+        }
+        existing.setName(req.getName());
+        existing.setSlug(RegexHelper.toSlug(req.getName(), RegexHelper.extractDigits(slug)));
+        existing.setDateOfBirth(req.getDateOfBirth());
+        existing.setDateOfDeath(req.getDateOfDeath());
+        existing.setImageUrl(req.getImageUrl());
+        existing.setBiography(req.getBiography());
+        existing.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        authorRepository.update(existing);
         return existing;
     }
 
-    public Author replace(String slug, Author athr) {
-        Author existing = athrRepo.getBySlug(slug);
-        existing.setName(athr.getName());
-        existing.setDateOfBirth(athr.getDateOfBirth());
-        existing.setDateOfDeath(athr.getDateOfDeath());
-        existing.setImageUrl(athr.getImageUrl());
-        existing.setBiography(athr.getBiography());
-        athrRepo.update(existing);
+    @Transactional
+    public Author patch(String slug, AuthorRequest req) {
+        Author existing = authorRepository.getBySlug(slug);
+        if (existing == null) {
+            throw new ResourceNotFoundException("Author with slug " + slug + " not found");
+        }
+
+        if (req.getName() != null && !req.getName().isEmpty())
+            existing.setName(req.getName());
+            existing.setSlug(RegexHelper.toSlug(req.getName(), RegexHelper.extractDigits(slug)));
+        if (req.getDateOfBirth() != null)
+            existing.setDateOfBirth(req.getDateOfBirth());
+        if (req.getDateOfDeath() != null)
+            existing.setDateOfDeath(req.getDateOfDeath());
+        if (req.getImageUrl() != null && !req.getImageUrl().isEmpty())
+            existing.setImageUrl(req.getImageUrl());
+        if (req.getBiography() != null && !req.getBiography().isEmpty())
+            existing.setBiography(req.getBiography());
+        existing.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        authorRepository.update(existing);
         return existing;
     }
 
-    public void deleteById(int id) {
-        athrRepo.deleteById(id);
-    }
-
+    @Transactional
     public void deleteBySlug(String slug) {
+        Author existing = authorRepository.getBySlug(slug);
+        if (existing == null) {
+            throw new ResourceNotFoundException("Author with slug " + slug + " not found");
+        }
         int id = RegexHelper.extractDigits(slug);
-        bkAthrRepo.deleteByAuthorId(id);
-        athrRepo.deleteById(id);
+        bookAuthorRepository.deleteByAuthorId(id);
+        authorRepository.deleteById(id);
     }
 
     public Author getById(int id) {
-        return athrRepo.getById(id);
+        Author author = authorRepository.getById(id);
+        if (author == null) {
+            throw new ResourceNotFoundException("Author with id " + id + " not found");
+        }
+        return author;
     }
 
     public Author getBySlug(String slug) {
-        return athrRepo.getBySlug(slug);
+        Author author = authorRepository.getBySlug(slug);
+        if (author == null) {
+            throw new ResourceNotFoundException("Author with slug " + slug + " not found");
+        }
+        return author;
     }
 
     public Author getByNamePattern(String name) {
-        return athrRepo.getByNamePattern(name);
+        return authorRepository.getByNamePattern(name);
     }
 
     public List<Author> getAll() {
-        return athrRepo.getAll();
+        return authorRepository.getAll();
     }
 }
