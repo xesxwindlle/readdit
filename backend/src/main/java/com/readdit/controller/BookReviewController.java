@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.readdit.dto.request.BookReviewRequest;
-import com.readdit.dto.response.BookReviewResponse;
+import com.readdit.dto.response.Response;
 import com.readdit.service.BookReviewService;
 
 @RestController
@@ -21,28 +21,21 @@ import com.readdit.service.BookReviewService;
 public class BookReviewController {
 
     @Autowired
-    public BookReviewService bkRvwSrvc;
+    private BookReviewService bkRvwSrvc;
 
     @GetMapping("/{reviewId}")
-    public ResponseEntity<BookReviewResponse> getById(@PathVariable int reviewId) {
-        BookReviewResponse resp = bkRvwSrvc.getById(reviewId);
-        if (resp != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(resp);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Response> getById(@PathVariable int reviewId) {
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(bkRvwSrvc.getById(reviewId)));
     }
 
     @PatchMapping("/{reviewId}")
-    public ResponseEntity<BookReviewResponse> patch(@PathVariable int reviewId, @RequestBody BookReviewRequest req) {
-        BookReviewResponse resp = bkRvwSrvc.update(reviewId, req);
-        return ResponseEntity.status(HttpStatus.OK).body(resp);
+    public ResponseEntity<Response> patch(@PathVariable int reviewId, @RequestBody BookReviewRequest req) {
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(bkRvwSrvc.update(reviewId, req)));
     }
 
     @PutMapping("/{reviewId}")
-    public ResponseEntity<BookReviewResponse> put(@PathVariable int reviewId, @RequestBody BookReviewRequest req) {
-        BookReviewResponse resp = bkRvwSrvc.replace(reviewId, req);
-        return ResponseEntity.status(HttpStatus.OK).body(resp);
+    public ResponseEntity<Response> update(@PathVariable int reviewId, @RequestBody BookReviewRequest req) {
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(bkRvwSrvc.replace(reviewId, req)));
     }
 
     @DeleteMapping("/{reviewId}")
@@ -50,5 +43,4 @@ public class BookReviewController {
         bkRvwSrvc.deleteById(reviewId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

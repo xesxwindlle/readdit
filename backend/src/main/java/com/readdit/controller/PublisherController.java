@@ -1,7 +1,5 @@
 package com.readdit.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,26 +13,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.readdit.dto.request.PublisherRequest;
+import com.readdit.dto.response.Response;
 import com.readdit.model.Publisher;
 import com.readdit.service.PublisherService;
+
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/publishers")
 public class PublisherController {
 
     @Autowired
-    public PublisherService pblshrSrvc;
+    private PublisherService pblshrSrvc;
 
     @PostMapping
-    public ResponseEntity<Publisher> post(@RequestBody PublisherRequest req) {
-        Publisher resp = pblshrSrvc.insert(req);
-        return ResponseEntity.status(HttpStatus.CREATED).body(resp);
+    public ResponseEntity<Response> create(@Valid @RequestBody PublisherRequest req) {
+        Publisher resp = pblshrSrvc.create(req);
+        return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
 
     @PutMapping("/{publisherId}")
-    public ResponseEntity<Publisher> put(@PathVariable String publisherId, @RequestBody Publisher req) {
+    public ResponseEntity<Response> update(@PathVariable String publisherId, @Valid @RequestBody PublisherRequest req) {
         Publisher resp = pblshrSrvc.update(publisherId, req);
-        return ResponseEntity.status(HttpStatus.OK).body(resp);
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @DeleteMapping("/{publisherId}")
@@ -44,17 +45,13 @@ public class PublisherController {
     }
 
     @GetMapping("/{publisherId}")
-    public ResponseEntity<Publisher> getById(@PathVariable String publisherId) {
+    public ResponseEntity<Response> getById(@PathVariable String publisherId) {
         Publisher resp = pblshrSrvc.getById(publisherId);
-        if (resp != null) {
-            return ResponseEntity.status(HttpStatus.OK).body(resp);
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @GetMapping
-    public ResponseEntity<List<Publisher>> getAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(pblshrSrvc.getAll());
+    public ResponseEntity<Response> getAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(pblshrSrvc.getAll()));
     }
 }

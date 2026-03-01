@@ -11,14 +11,17 @@ import com.readdit.enums.Role;
 import com.readdit.exception.ResourceAlreadyExistsException;
 import com.readdit.exception.ResourceNotFoundException;
 import com.readdit.model.User;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.readdit.repository.UserRepository;
 
 @Service
 public class UserService {
 
     @Autowired
-    public UserRepository userRepository;
+    private UserRepository userRepository;
 
+    @Transactional
     public User create(UserRequest req) {
         if (userRepository.getByEmail(req.getEmail()) != null) {
             throw new ResourceAlreadyExistsException("User with email " + req.getEmail() + " already exists");
@@ -32,6 +35,7 @@ public class UserService {
         return resp;
     }
 
+    @Transactional
     public User update(int userId, UserRequest req) {
         User existing = userRepository.getById(userId);
         if (existing == null) {
@@ -54,6 +58,7 @@ public class UserService {
         return existing;
     }
 
+    @Transactional
     public User patch(int userId, UserRequest req) {
         User existing = userRepository.getById(userId);
         if (existing == null) {
@@ -84,6 +89,7 @@ public class UserService {
         return existing;
     }
 
+    @Transactional
     public User updateRole(int userId, Role role) {
         User existing = userRepository.getById(userId);
         if (existing == null) {
@@ -95,6 +101,7 @@ public class UserService {
         return existing;
     }
 
+    @Transactional
     public void deleteById(int id) {
         User usr = userRepository.getById(id);
         if (usr == null) {

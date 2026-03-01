@@ -8,28 +8,28 @@ import org.springframework.stereotype.Service;
 import com.readdit.dto.request.BookGenreRequest;
 import com.readdit.dto.request.BookRequest;
 import com.readdit.dto.response.BookResponse;
+import com.readdit.exception.ResourceNotFoundException;
 import com.readdit.model.Book;
 import com.readdit.repository.BookAuthorRepository;
 import com.readdit.repository.BookGenreRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.readdit.repository.BookRepository;
-import com.readdit.util.RegexHelper;
 
 @Service
 public class BookService {
 
     @Autowired
-    BookAuthorRepository bookAuthorRepository;
+    private BookRepository bookRepository;
 
     @Autowired
-    BookGenreRepository bookGenreRepository;
+    private BookAuthorRepository bookAuthorRepository;
 
-    private final BookRepository bookRepository;
+    @Autowired
+    private BookGenreRepository bookGenreRepository;
 
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
-
-    public BookResponse insert(BookRequest bookRequest) {
+    @Transactional
+    public BookResponse create(BookRequest bookRequest) {
         Book savedBook = bookRepository.insert(bookRequest.toBook());
 
         bookRequest.getAuthorIds().forEach(authorId ->
@@ -44,9 +44,13 @@ public class BookService {
     }
 
     // PATCH - partial update, only overwrites non-null/non-empty fields
+    @Transactional
     public BookResponse patch(int bookId, BookRequest bookRequest) {
         Book book = bookRequest.toBook();
         Book existing = bookRepository.getById(bookId);
+        if (existing == null) {
+            throw new ResourceNotFoundException("Book with id " + bookId + " not found");
+        }
 
         if (book.getIsbn() != null && !book.getIsbn().isEmpty())
             existing.setIsbn(book.getIsbn());
@@ -80,7 +84,11 @@ public class BookService {
     }
 
     // PUT - full replace, overwrites all fields and replaces all links
+    @Transactional
     public BookResponse update(int bookId, BookRequest bookRequest) {
+        if (bookRepository.getById(bookId) == null) {
+            throw new ResourceNotFoundException("Book with id " + bookId + " not found");
+        }
         Book book = bookRequest.toBook();
         book.setId(bookId);
         bookRepository.update(bookId, book);
@@ -100,41 +108,49 @@ public class BookService {
         return getById(bookId);
     }
 
-    public int deleteById(int id) {
+    @Transactional
+    public void deleteById(int id) {
+        if (bookRepository.getById(id) == null) {
+            throw new ResourceNotFoundException("Book with id " + id + " not found");
+        }
         bookAuthorRepository.deleteByBookId(id);
         bookGenreRepository.deleteByBookId(id);
-        return bookRepository.deleteById(id);
+        bookRepository.deleteById(id);
     }
 
     public BookResponse getBySlug(String slug) {
         Book book = bookRepository.getBySlug(slug);
-        if (book == null) return null;
+        if (book == null) {
+            throw new ResourceNotFoundException("Book with slug " + slug + " not found");
+        }
         return getById(book.getId());
     }
 
     public BookResponse patchBySlug(String slug, BookRequest bookRequest) {
-        return patch(bookRepository.getBySlug(slug).getId(), bookRequest);
+        return patch(getBySlug(slug).getId(), bookRequest);
     }
 
     public BookResponse updateBySlug(String slug, BookRequest bookRequest) {
-        return update(bookRepository.getBySlug(slug).getId(), bookRequest);
+        return update(getBySlug(slug).getId(), bookRequest);
     }
 
     public void deleteBySlug(String slug) {
-        deleteById(bookRepository.getBySlug(slug).getId());
+        deleteById(getBySlug(slug).getId());
     }
 
     public BookResponse addGenreBySlug(String slug, BookGenreRequest req) {
-        return addGenre(bookRepository.getBySlug(slug).getId(), req);
+        return addGenre(getBySlug(slug).getId(), req);
     }
 
-    public int removeGenreBySlug(String slug, int genreId) {
-        return removeGenre(bookRepository.getBySlug(slug).getId(), genreId);
+    public void removeGenreBySlug(String slug, int genreId) {
+        removeGenre(getBySlug(slug).getId(), genreId);
     }
 
     public BookResponse getById(int id) {
         Book book = bookRepository.getById(id);
-        if (book == null) return null;
+        if (book == null) {
+            throw new ResourceNotFoundException("Book with id " + id + " not found");
+        }
 
         List<String> authorNames = bookAuthorRepository.findAuthorsByBookId(id)
                 .stream().map(a -> a.getName()).toList();
@@ -159,12 +175,11 @@ public class BookService {
         return getById(bookId);
     }
 
-    public int removeGenre(int bookId, int genreId) {
-        return bookGenreRepository.deleteByIds(bookId, genreId);
+    public void removeGenre(int bookId, int genreId) {
+        bookGenreRepository.deleteByIds(bookId, genreId);
     }
 
-    //Advanced Search
-
+    // Advanced Search
     public Book getByTitle(String title) {
         return bookRepository.getByTitle(title);
     }
@@ -172,5 +187,4 @@ public class BookService {
     public List<Book> listTopNPricedBook(int n) {
         return bookRepository.listTopNPricedBook(n);
     }
-
 }

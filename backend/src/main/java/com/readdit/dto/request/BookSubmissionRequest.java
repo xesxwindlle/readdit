@@ -2,6 +2,7 @@ package com.readdit.dto.request;
 
 import java.sql.Date;
 import java.sql.Timestamp;
+import java.util.List;
 
 import org.hibernate.validator.constraints.URL;
 
@@ -38,10 +39,13 @@ public class BookSubmissionRequest {
     @URL
     private String coverUrl;
 
-    @Size(max = 5 * 1024 * 1024, 
-          message = "Cover image must be less than 5MB") 
-          
+    @Size(max = 5 * 1024 * 1024,
+          message = "Cover image must be less than 5MB")
     private byte[] coverImage;
+
+    private List<Integer> authorIds;
+
+    private List<Integer> genreIds;
 
     public BookSubmissionRequest() {}
 

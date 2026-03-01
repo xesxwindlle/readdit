@@ -22,8 +22,8 @@ public class BookRequest {
     @NotBlank
     private String title;
 
-    private String slug;
-    
+    private String slug; 
+
     @NotBlank
     private String publisherId;
 

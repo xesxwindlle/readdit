@@ -18,6 +18,8 @@ import com.readdit.model.User;
 import com.readdit.repository.AuthorRepository;
 import com.readdit.repository.AuthorSubmissionRepository;
 import com.readdit.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.readdit.util.RegexHelper;
 
 @Service
@@ -32,6 +34,7 @@ public class AuthorSubmissionService {
     @Autowired
     private AuthorRepository authorRepo;
 
+    @Transactional
     public AuthorSubmissionResponse submit(AuthorSubmissionRequest req) {
         if (usrRepo.getById(req.getSubmitterId()) == null) {
             throw new ResourceNotFoundException("User with id " + req.getSubmitterId() + " not found");
@@ -43,6 +46,7 @@ public class AuthorSubmissionService {
         return AuthorSubmissionResponse.fromAuthorSubmission(sub, submitter, reviewer);
     }
 
+    @Transactional
     public AuthorSubmissionResponse review(int submissionId, ReviewRequest req) {
         AuthorSubmission submission = submissionRepo.findById(submissionId)
             .orElseThrow(() -> new ResourceNotFoundException("Submission with id " + submissionId + " not found"));
@@ -118,6 +122,7 @@ public class AuthorSubmissionService {
         return resp;
     }
 
+    @Transactional
     public void deleteById(int id) {
         submissionRepo.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Submission with id " + id + " not found"));

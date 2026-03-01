@@ -12,7 +12,7 @@ public class BookSubmissionGenre {
     @Id
     private int id; 
 
-    private int bookSubmissionId;
+    private int submissionId;
 
     private int genreId; 
 

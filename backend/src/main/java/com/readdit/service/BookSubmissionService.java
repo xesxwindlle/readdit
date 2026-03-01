@@ -15,12 +15,20 @@ import com.readdit.dto.response.BookSubmissionResponse;
 import com.readdit.enums.ReviewStatus;
 import com.readdit.model.Book;
 import com.readdit.model.BookSubmission;
+import com.readdit.model.BookSubmissionAuthor;
+import com.readdit.model.BookSubmissionGenre;
 import com.readdit.model.Publisher;
 import com.readdit.model.User;
+import com.readdit.repository.AuthorRepository;
 import com.readdit.repository.BookRepository;
+import com.readdit.repository.BookSubmissionAuthorRepository;
+import com.readdit.repository.BookSubmissionGenreRepository;
 import com.readdit.repository.BookSubmissionRepository;
+import com.readdit.repository.GenreRepository;
 import com.readdit.repository.PublisherRepository;
 import com.readdit.repository.UserRepository;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.readdit.util.RegexHelper;
 
 @Service
@@ -38,21 +46,55 @@ public class BookSubmissionService {
     @Autowired
     private PublisherRepository publisherRepo;
 
+    @Autowired
+    private BookSubmissionAuthorRepository subAuthorRepo;
+
+    @Autowired
+    private BookSubmissionGenreRepository subGenreRepo;
+
+    @Autowired
+    private AuthorRepository authorRepo;
+
+    @Autowired
+    private GenreRepository genreRepo;
+
+    @Transactional
     public BookSubmissionResponse submit(BookSubmissionRequest req) {
         if (usrRepo.getById(req.getSubmitterId()) == null) {
             throw new ResourceNotFoundException("User with id " + req.getSubmitterId() + " not found");
         }
-        
+
         if (req.getIsbn() != null && bookRepo.getByIsbn(req.getIsbn()) != null) {
             throw new ResourceAlreadyExistsException("Book with ISBN " + req.getIsbn() + " already exists");
         }
 
         BookSubmission sub = submissionRepo.save(req.toBookSubmission());
+
+        if (req.getAuthorIds() != null) {
+            for (int authorId : req.getAuthorIds()) {
+                BookSubmissionAuthor link = new BookSubmissionAuthor();
+                link.setSubmissionId(sub.getId());
+                link.setAuthorId(authorId);
+                subAuthorRepo.save(link);
+            }
+        }
+
+        if (req.getGenreIds() != null) {
+            for (int genreId : req.getGenreIds()) {
+                BookSubmissionGenre link = new BookSubmissionGenre();
+                link.setSubmissionId(sub.getId());
+                link.setGenreId(genreId);
+                subGenreRepo.save(link);
+            }
+        }
+
         User submitter = usrRepo.getById(sub.getSubmitterId());
         User reviewer = sub.getReviewerId() != null ? usrRepo.getById(sub.getReviewerId()) : null;
-        return BookSubmissionResponse.fromBookSubmission(sub, submitter, reviewer);
+        return BookSubmissionResponse.fromBookSubmission(sub, submitter, reviewer,
+                buildAuthors(sub.getId()), buildGenres(sub.getId()));
     }
 
+    @Transactional
     public BookSubmissionResponse review(int submissionId, ReviewRequest req) {
         BookSubmission submission = submissionRepo.findById(submissionId)
             .orElseThrow(() -> new ResourceNotFoundException("Submission with id " + submissionId + " not found"));
@@ -107,10 +149,10 @@ public class BookSubmissionService {
         }
 
         submissionRepo.save(submission);
-        // return submission;
         User submitter = usrRepo.getById(submission.getSubmitterId());
         User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
-        return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer);
+        return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer,
+                buildAuthors(submission.getId()), buildGenres(submission.getId()));
     }
 
     public BookSubmissionResponse getById(int id) {
@@ -118,34 +160,56 @@ public class BookSubmissionService {
             .orElseThrow(() -> new ResourceNotFoundException("Submission with id " + id + " not found"));
         User submitter = usrRepo.getById(submission.getSubmitterId());
         User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
-        return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer);
+        return BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer,
+                buildAuthors(id), buildGenres(id));
     }
 
     public List<BookSubmissionResponse> getAll() {
         List<BookSubmissionResponse> resp = new ArrayList<>();
         List<BookSubmission> submissions = submissionRepo.findAll();
         for (BookSubmission submission : submissions) {
-        User submitter = usrRepo.getById(submission.getSubmitterId());
-        User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
-            resp.add(BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer));
+            User submitter = usrRepo.getById(submission.getSubmitterId());
+            User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
+            resp.add(BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer,
+                    buildAuthors(submission.getId()), buildGenres(submission.getId())));
         }
         return resp;
     }
 
-     public List<BookSubmissionResponse> getByReviewStatus(ReviewStatus status) {
+    public List<BookSubmissionResponse> getByReviewStatus(ReviewStatus status) {
         List<BookSubmissionResponse> resp = new ArrayList<>();
         List<BookSubmission> submissions = submissionRepo.findByReviewStatus(status.getValue());
         for (BookSubmission submission : submissions) {
             User submitter = usrRepo.getById(submission.getSubmitterId());
             User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
-            resp.add(BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer));
+            resp.add(BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer,
+                    buildAuthors(submission.getId()), buildGenres(submission.getId())));
         }
         return resp;
     }
 
+    @Transactional
     public void deleteById(int id) {
         submissionRepo.findById(id)
             .orElseThrow(() -> new ResourceNotFoundException("Submission with id " + id + " not found"));
         submissionRepo.deleteById(id);
+    }
+
+    private List<String> buildAuthors(int submissionId) {
+        List<String> result = new ArrayList<>();
+        for (BookSubmissionAuthor link : subAuthorRepo.findBySubmissionId(submissionId)) {
+            var author = authorRepo.getById(link.getAuthorId());
+            if (author != null) result.add(author.getName());
+        }
+        return result;
+    }
+
+    private List<String> buildGenres(int submissionId) {
+        List<String> result = new ArrayList<>();
+        for (BookSubmissionGenre link : subGenreRepo.findBySubmissionId(submissionId)) {
+            var genre = genreRepo.get(link.getGenreId());
+            if (genre != null) result.add(genre.getName());
+        }
+        return result;
     }
 }
