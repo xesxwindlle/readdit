@@ -128,4 +128,5 @@ import com.readdit.model.AuthorSubmission;
 public interface AuthorSubmissionRepository extends CrudRepository<AuthorSubmission, Integer> {
     List<AuthorSubmission> findAll();
     List<AuthorSubmission> findByReviewStatus(String reviewStatus);
+    List<AuthorSubmission> findBySubmitterId(int submitterId);
 };

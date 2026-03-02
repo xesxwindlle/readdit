@@ -3,6 +3,7 @@ package com.readdit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,16 +30,19 @@ public class BookReviewController {
     }
 
     @PatchMapping("/{reviewId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Response> patch(@PathVariable int reviewId, @RequestBody BookReviewRequest req) {
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(bkRvwSrvc.update(reviewId, req)));
     }
 
     @PutMapping("/{reviewId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Response> update(@PathVariable int reviewId, @RequestBody BookReviewRequest req) {
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(bkRvwSrvc.replace(reviewId, req)));
     }
 
     @DeleteMapping("/{reviewId}")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Void> deleteById(@PathVariable int reviewId) {
         bkRvwSrvc.deleteById(reviewId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

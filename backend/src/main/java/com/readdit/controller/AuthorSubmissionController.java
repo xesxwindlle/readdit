@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +33,7 @@ public class AuthorSubmissionController {
     private AuthorSubmissionService submissionSrvc;
 
     @PostMapping
+    @PreAuthorize("hasRole('USER')")
     @Transactional
     public ResponseEntity<Response> submit(@Valid @RequestBody AuthorSubmissionRequest req) {
         AuthorSubmissionResponse resp = submissionSrvc.submit(req);
@@ -39,6 +41,7 @@ public class AuthorSubmissionController {
     }
 
     @PatchMapping("/{submissionId}/review")
+    @PreAuthorize("hasRole('MODERATOR')")
     @Transactional
     public ResponseEntity<Response> review(
             @PathVariable int submissionId,
@@ -65,7 +68,15 @@ public class AuthorSubmissionController {
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
+    @GetMapping("/submitter/{submitterId}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<Response> getBySubmitterId(@PathVariable int submitterId) {
+        List<AuthorSubmissionResponse> resp = submissionSrvc.getBySubmitterId(submitterId);
+        return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
+    }
+
     @DeleteMapping("/{submissionId}")
+    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public ResponseEntity<Void> deleteById(@PathVariable int submissionId) {
         submissionSrvc.deleteById(submissionId);

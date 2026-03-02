@@ -122,6 +122,16 @@ public class AuthorSubmissionService {
         return resp;
     }
 
+    public List<AuthorSubmissionResponse> getBySubmitterId(int submitterId) {
+        List<AuthorSubmissionResponse> resp = new ArrayList<>();
+        for (AuthorSubmission submission : submissionRepo.findBySubmitterId(submitterId)) {
+            User submitter = usrRepo.getById(submission.getSubmitterId());
+            User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
+            resp.add(AuthorSubmissionResponse.fromAuthorSubmission(submission, submitter, reviewer));
+        }
+        return resp;
+    }
+
     @Transactional
     public void deleteById(int id) {
         submissionRepo.findById(id)

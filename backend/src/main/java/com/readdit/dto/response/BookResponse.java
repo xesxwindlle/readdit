@@ -19,6 +19,8 @@ public class BookResponse {
 
     private List<String> genreNames;
 
+    private String publisherName;
+
     public BookResponse() {
     }
 
@@ -86,7 +88,7 @@ public class BookResponse {
         this.coverImage = coverImage;
     }
 
-      public List<String> getAuthorNames() {
+    public List<String> getAuthorNames() {
         return authorNames;
     }
 
@@ -102,7 +104,15 @@ public class BookResponse {
         this.genreNames = genreNames;
     }
 
-    public static BookResponse fromBook(Book book, List<String> authorNames, List<String> genreNames) {
+    public String getPublisherName() {
+        return publisherName;
+    }
+
+    public void setPublisherName(String publisherName) {
+        this.publisherName = publisherName;
+    }
+
+    public static BookResponse fromBook(Book book, List<String> authorNames, List<String> genreNames, String publisherName) {
         BookResponse response = new BookResponse();
         response.setId(book.getId());
         response.setIsbn(book.getIsbn());
@@ -110,10 +120,10 @@ public class BookResponse {
         response.setSlug(book.getSlug());
         response.setPublisherId(book.getPublisherId());
         response.setReleaseDate(book.getReleaseDate());
-        response.setPrice(book.getPrice());
         response.setCoverImage(book.getCoverImage());
         response.setAuthorNames(authorNames);
         response.setGenreNames(genreNames);
+        response.setPublisherName(publisherName);
         return response;
     }
 }

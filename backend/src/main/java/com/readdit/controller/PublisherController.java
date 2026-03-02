@@ -3,6 +3,7 @@ package com.readdit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,18 +28,21 @@ public class PublisherController {
     private PublisherService pblshrSrvc;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> create(@Valid @RequestBody PublisherRequest req) {
         Publisher resp = pblshrSrvc.create(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
 
     @PutMapping("/{publisherId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> update(@PathVariable String publisherId, @Valid @RequestBody PublisherRequest req) {
         Publisher resp = pblshrSrvc.update(publisherId, req);
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @DeleteMapping("/{publisherId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable String publisherId) {
         pblshrSrvc.deleteById(publisherId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

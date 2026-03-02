@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.readdit.dto.request.UserRequest;
@@ -21,6 +22,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
+
     @Transactional
     public User create(UserRequest req) {
         if (userRepository.getByEmail(req.getEmail()) != null) {
@@ -31,8 +35,9 @@ public class UserService {
             throw new ResourceAlreadyExistsException("User with display name " + req.getDisplayName() + " already exists");
         }
 
-        User resp = userRepository.insert(req.toUser());
-        return resp;
+        User user = req.toUser();
+        user.setPassword(passwordEncoder.encode(req.getPassword()));
+        return userRepository.insert(user);
     }
 
     @Transactional

@@ -3,6 +3,7 @@ package com.readdit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,18 +28,21 @@ public class GenreController {
     private GenreService gnrSrvc;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> create(@Valid @RequestBody GenreRequest req) {
         Genre resp = gnrSrvc.create(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
 
     @PutMapping("/{genreId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> update(@PathVariable int genreId, @Valid @RequestBody GenreRequest req) {
         Genre resp = gnrSrvc.update(genreId, req);
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @DeleteMapping("/{genreId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable int genreId) {
         gnrSrvc.deleteGenreById(genreId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

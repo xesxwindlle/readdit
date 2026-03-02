@@ -12,9 +12,9 @@ import com.readdit.exception.ResourceNotFoundException;
 import com.readdit.model.Book;
 import com.readdit.repository.BookAuthorRepository;
 import com.readdit.repository.BookGenreRepository;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.readdit.repository.BookRepository;
+import com.readdit.repository.PublisherRepository;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class BookService {
@@ -27,6 +27,9 @@ public class BookService {
 
     @Autowired
     private BookGenreRepository bookGenreRepository;
+
+    @Autowired
+    private PublisherRepository publisherRepository;
 
     @Transactional
     public BookResponse create(BookRequest bookRequest) {
@@ -156,8 +159,13 @@ public class BookService {
                 .stream().map(a -> a.getName()).toList();
         List<String> genreNames = bookGenreRepository.findGenresByBookId(id)
                 .stream().map(g -> g.getName()).toList();
+        String publisherName = book.getPublisherId() != null
+                ? publisherRepository.getById(book.getPublisherId()) != null
+                        ? publisherRepository.getById(book.getPublisherId()).getName()
+                        : book.getPublisherId()
+                : null;
 
-        return BookResponse.fromBook(book, authorNames, genreNames);
+        return BookResponse.fromBook(book, authorNames, genreNames, publisherName);
     }
 
     public List<BookResponse> getAll() {
@@ -166,7 +174,12 @@ public class BookService {
                     .stream().map(a -> a.getName()).toList();
             List<String> genreNames = bookGenreRepository.findGenresByBookId(book.getId())
                     .stream().map(g -> g.getName()).toList();
-            return BookResponse.fromBook(book, authorNames, genreNames);
+            String publisherName = book.getPublisherId() != null
+                    ? publisherRepository.getById(book.getPublisherId()) != null
+                            ? publisherRepository.getById(book.getPublisherId()).getName()
+                            : book.getPublisherId()
+                    : null;
+            return BookResponse.fromBook(book, authorNames, genreNames, publisherName);
         }).toList();
     }
 

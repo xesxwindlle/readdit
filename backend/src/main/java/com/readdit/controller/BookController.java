@@ -3,6 +3,7 @@ package com.readdit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,21 +36,25 @@ public class BookController {
 
     // Basic API Endpoints
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> create(@Valid @RequestBody BookRequest bookRequest) {
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(bkSrvc.create(bookRequest)));
     }
 
     @PatchMapping("/{slug}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> patch(@PathVariable String slug, @Valid @RequestBody BookRequest bookRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(bkSrvc.patchBySlug(slug, bookRequest)));
     }
 
     @PutMapping("/{slug}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> update(@PathVariable String slug, @Valid @RequestBody BookRequest bookRequest) {
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(bkSrvc.updateBySlug(slug, bookRequest)));
     }
 
     @DeleteMapping("/{slug}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteBySlug(@PathVariable String slug) {
         bkSrvc.deleteBySlug(slug);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
@@ -66,17 +71,20 @@ public class BookController {
     }
 
     @PostMapping("/{slug}/genres")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> addGenre(@PathVariable String slug, @Valid @RequestBody BookGenreRequest req) {
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(bkSrvc.addGenreBySlug(slug, req)));
     }
 
     @DeleteMapping("/{slug}/genres/{genreId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteGenre(@PathVariable String slug, @PathVariable int genreId) {
         bkSrvc.removeGenreBySlug(slug, genreId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PostMapping("/{slug}/reviews")
+    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Response> createReview(@PathVariable String slug, @Valid @RequestBody BookReviewRequest req) {
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(bkRvwSrvc.createReview(slug, req)));
     }

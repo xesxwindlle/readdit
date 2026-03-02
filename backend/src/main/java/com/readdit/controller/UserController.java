@@ -3,6 +3,7 @@ package com.readdit.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -29,30 +30,35 @@ public class UserController {
     private UserService usrSrvc;
 
     @PostMapping
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> create(@Valid @RequestBody UserRequest req) {
         User resp = usrSrvc.create(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(Response.success(resp));
     }
 
     @PutMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> update(@PathVariable int userId, @Valid @RequestBody UserRequest req) {
         User resp = usrSrvc.update(userId, req);
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @PatchMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> patch(@PathVariable int userId, @RequestBody UserRequest req) {
         User resp = usrSrvc.patch(userId, req);
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @PatchMapping("/{userId}/role/{role}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Response> updateRole(@PathVariable int userId, @PathVariable Role role) {
         User resp = usrSrvc.updateRole(userId, role);
         return ResponseEntity.status(HttpStatus.OK).body(Response.success(resp));
     }
 
     @DeleteMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteById(@PathVariable int userId) {
         usrSrvc.deleteById(userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

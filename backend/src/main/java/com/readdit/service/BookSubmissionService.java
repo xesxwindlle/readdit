@@ -188,6 +188,17 @@ public class BookSubmissionService {
         return resp;
     }
 
+    public List<BookSubmissionResponse> getBySubmitterId(int submitterId) {
+        List<BookSubmissionResponse> resp = new ArrayList<>();
+        for (BookSubmission submission : submissionRepo.findBySubmitterId(submitterId)) {
+            User submitter = usrRepo.getById(submission.getSubmitterId());
+            User reviewer = submission.getReviewerId() != null ? usrRepo.getById(submission.getReviewerId()) : null;
+            resp.add(BookSubmissionResponse.fromBookSubmission(submission, submitter, reviewer,
+                    buildAuthors(submission.getId()), buildGenres(submission.getId())));
+        }
+        return resp;
+    }
+
     @Transactional
     public void deleteById(int id) {
         submissionRepo.findById(id)
