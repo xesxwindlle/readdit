@@ -55,16 +55,83 @@ INSERT INTO author (slug, name, date_of_birth, date_of_death, image_url, biograp
 -- Genres
 -- ----------------------
 INSERT INTO genre (name, slug) VALUES
-('Programming',         'programming'),
-('Web Development',     'web-development'),
-('Java',                'java'),
-('JavaScript',          'javascript'),
-('Database',            'database'),
-('Software Engineering','software-engineering'),
-('User Experience',     'user-experience'),
-('Ruby',                'ruby'),
-('Big Data',            'big-data'),
-('Language Design',     'language-design');
+('Programming', 'programming'),
+('Software Engineering', 'software-engineering'),
+('Computer Science', 'computer-science'),
+('Databases', 'databases'),
+('Web Development', 'web-development'),
+('Design Patterns', 'design-patterns'),
+('Data Structures', 'data-structures'),
+('Machine Learning', 'machine-learning'),
+('Artificial Intelligence', 'artificial-intelligence'),
+('DevOps', 'devops'),
+
+('Algorithms', 'algorithms'),
+('Operating Systems', 'operating-systems'),
+('System Design', 'system-design'),
+('Software Testing', 'software-testing'),
+('Fantasy', 'fantasy'),
+('Romance', 'romance'),
+('History', 'history'),
+('Religion', 'religion'),
+('Psychology', 'psychology'),
+('Mystery', 'mystery'),
+
+('Biography', 'biography'),
+('Autobiography', 'autobiography'),
+('Memoir', 'memoir'),
+('Self-Help', 'self-help'),
+('Personal Development', 'personal-development'),
+('Productivity', 'productivity'),
+('Entrepreneurship', 'entrepreneurship'),
+('Finance', 'finance'),
+('Investing', 'investing'),
+('Economics', 'economics'),
+
+('Political Science', 'political-science'),
+('Philosophy', 'philosophy'),
+('Sociology', 'sociology'),
+('Anthropology', 'anthropology'),
+('Education', 'education'),
+('Parenting', 'parenting'),
+('Health', 'health'),
+('Fitness', 'fitness'),
+('Nutrition', 'nutrition'),
+('Cooking', 'cooking'),
+
+('Travel', 'travel'),
+('Adventure', 'adventure'),
+('Thriller', 'thriller'),
+('Crime', 'crime'),
+('Detective', 'detective'),
+('Horror', 'horror'),
+('Science Fiction', 'science-fiction'),
+('Dystopian', 'dystopian'),
+('Young Adult', 'young-adult'),
+('Children', 'children'),
+
+('Poetry', 'poetry'),
+('Drama', 'drama'),
+('Satire', 'satire'),
+('Graphic Novel', 'graphic-novel'),
+('Comics', 'comics'),
+('Art', 'art'),
+('Photography', 'photography'),
+('Music', 'music'),
+('Film', 'film'),
+('Sports', 'sports'),
+
+('Technology', 'technology'),
+('Artificial Intelligence Advanced', 'artificial-intelligence-advanced'),
+('Cybersecurity', 'cybersecurity'),
+('Blockchain', 'blockchain'),
+('Data Science', 'data-science'),
+('Machine Learning Advanced', 'machine-learning-advanced'),
+('Cloud Computing', 'cloud-computing'),
+('DevOps Engineering', 'devops-engineering'),
+('Game Development', 'game-development'),
+('Web Engineering', 'web-engineering');
+
 
 -- ----------------------
 -- Books (cover_image loaded separately)
@@ -191,6 +258,14 @@ INSERT INTO publisher_no_pk VALUES
 ('gotop-information',        'Gotop Information'),
 ('pragmatic-bookshelf',      'Pragmatic Bookshelf'),
 ('addison-wesley',           'Addison Wesley');
+
+
+
+
+
+
+
+
 
 -- =============================================
 -- END OF SCRIPT

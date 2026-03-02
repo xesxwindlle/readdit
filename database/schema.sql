@@ -67,7 +67,8 @@ CREATE TABLE book (
   release_date TIMESTAMP,
   price DECIMAL(6,2),
   publisher_id VARCHAR(100) NOT NULL,
-  cover_image BLOB,
+  cover_url VARCHAR(500),
+  cover_image MEDIUMBLOB,
   CONSTRAINT fk_book_publisher FOREIGN KEY (publisher_id)
       REFERENCES publisher (id)
 );
