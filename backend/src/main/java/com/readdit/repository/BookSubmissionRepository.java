@@ -131,4 +131,5 @@ public interface BookSubmissionRepository extends CrudRepository<BookSubmission,
     List<BookSubmission> findAll();
     List<BookSubmission> findByReviewStatus(String reviewStatus);
     List<BookSubmission> findBySubmitterId(int submitterId);
+    List<BookSubmission> findByBookId(Integer bookId);
 };

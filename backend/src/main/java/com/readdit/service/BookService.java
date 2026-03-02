@@ -12,7 +12,11 @@ import com.readdit.exception.ResourceNotFoundException;
 import com.readdit.model.Book;
 import com.readdit.repository.BookAuthorRepository;
 import com.readdit.repository.BookGenreRepository;
+import com.readdit.model.BookSubmission;
 import com.readdit.repository.BookRepository;
+import com.readdit.repository.BookReviewRepository;
+import com.readdit.util.RegexHelper;
+import com.readdit.repository.BookSubmissionRepository;
 import com.readdit.repository.PublisherRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +35,17 @@ public class BookService {
     @Autowired
     private PublisherRepository publisherRepository;
 
+    @Autowired
+    private BookReviewRepository bookReviewRepository;
+
+    @Autowired
+    private BookSubmissionRepository bookSubmissionRepository;
+
     @Transactional
     public BookResponse create(BookRequest bookRequest) {
         Book savedBook = bookRepository.insert(bookRequest.toBook());
+        savedBook.setSlug(RegexHelper.toSlug(savedBook.getTitle(), savedBook.getId()));
+        bookRepository.update(savedBook.getId(), savedBook);
 
         bookRequest.getAuthorIds().forEach(authorId ->
             bookAuthorRepository.save(savedBook.getId(), authorId)
@@ -116,6 +128,12 @@ public class BookService {
         if (bookRepository.getById(id) == null) {
             throw new ResourceNotFoundException("Book with id " + id + " not found");
         }
+        // Null out book_id on any submissions that reference this book
+        for (BookSubmission s : bookSubmissionRepository.findByBookId(id)) {
+            s.setBookId(null);
+            bookSubmissionRepository.save(s);
+        }
+        bookReviewRepository.deleteByBookId(id);
         bookAuthorRepository.deleteByBookId(id);
         bookGenreRepository.deleteByBookId(id);
         bookRepository.deleteById(id);

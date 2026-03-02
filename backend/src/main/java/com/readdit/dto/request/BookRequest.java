@@ -30,11 +30,12 @@ public class BookRequest {
     @PastOrPresent
     private Date releaseDate;
 
-    @Positive
     private double price;
 
-    @Size(max = 5 * 1024 * 1024, 
-          message = "Cover image must be less than 5MB") 
+    private String coverUrl;
+
+    @Size(max = 5 * 1024 * 1024,
+          message = "Cover image must be less than 5MB")
     private byte[] coverImage;
 
     private List<@NotNull(message = "Author ID cannot be null")
@@ -55,6 +56,7 @@ public class BookRequest {
         book.setPublisherId(publisherId);
         book.setReleaseDate(releaseDate);
         book.setPrice(price);
+        book.setCoverUrl(coverUrl);
         book.setCoverImage(coverImage);
         return book;
     }

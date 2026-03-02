@@ -14,6 +14,7 @@ public class BookResponse {
     private String publisherId;
     private Date releaseDate;
     private double price;
+    private String coverUrl;
     private byte[] coverImage;
     private List<String> authorNames;
 
@@ -80,6 +81,14 @@ public class BookResponse {
         this.price = price;
     }
 
+    public String getCoverUrl() {
+        return coverUrl;
+    }
+
+    public void setCoverUrl(String coverUrl) {
+        this.coverUrl = coverUrl;
+    }
+
     public byte[] getCoverImage() {
         return coverImage;
     }
@@ -120,6 +129,7 @@ public class BookResponse {
         response.setSlug(book.getSlug());
         response.setPublisherId(book.getPublisherId());
         response.setReleaseDate(book.getReleaseDate());
+        response.setCoverUrl(book.getCoverUrl());
         response.setCoverImage(book.getCoverImage());
         response.setAuthorNames(authorNames);
         response.setGenreNames(genreNames);

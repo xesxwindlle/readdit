@@ -20,8 +20,8 @@ public class BookRepository {
 
     public Book insert(Book book) {
     String sql = """
-                INSERT INTO book (isbn, title, slug, release_date, price, publisher_id, cover_image)
-                VALUES (:isbn, :title, :slug, :releaseDate, :price, :publisherId, :coverImage)
+                INSERT INTO book (isbn, title, slug, release_date, price, publisher_id, cover_url, cover_image)
+                VALUES (:isbn, :title, :slug, :releaseDate, :price, :publisherId, :coverUrl, :coverImage)
             """;
 
     MapSqlParameterSource params = new MapSqlParameterSource()
@@ -31,6 +31,7 @@ public class BookRepository {
         .addValue("releaseDate", book.getReleaseDate())
         .addValue("price", book.getPrice())
         .addValue("publisherId", book.getPublisherId())
+        .addValue("coverUrl", book.getCoverUrl())
         .addValue("coverImage", book.getCoverImage());
 
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -50,6 +51,7 @@ public class BookRepository {
                     release_date = :releaseDate,
                     price = :price,
                     publisher_id = :publisherId,
+                    cover_url = :coverUrl,
                     cover_image = :coverImage
                 WHERE id = :id
                 """;
@@ -60,6 +62,7 @@ public class BookRepository {
                 .addValue("releaseDate", book.getReleaseDate())
                 .addValue("price", book.getPrice())
                 .addValue("publisherId", book.getPublisherId())
+                .addValue("coverUrl", book.getCoverUrl())
                 .addValue("coverImage", book.getCoverImage())
                 .addValue("id", bookId);
         return jdbc.update(sql, params);

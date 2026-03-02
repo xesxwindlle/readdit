@@ -145,4 +145,5 @@ import com.readdit.model.BookReview;
 @RepositoryRestResource(exported = false)
 public interface BookReviewRepository extends CrudRepository<BookReview, Integer> {
     List<BookReview> findByBookId(int bookId);
+    void deleteByBookId(int bookId);
 };
