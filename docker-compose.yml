@@ -3,7 +3,7 @@ services: # "services" defines the containers (3) I like to run
   mysql:
     image: mysql:8  # Use the official MySQL 8 image from Docker Hub (no Dockerfile needed)
     environment:    # Environment variables passed into the container (like .env)
-      MYSQL_ROOT_PASSWORD: readdit123
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: readdit # MySQL will auto-create this database on first start
     volumes:
       - ./database/schema.sql:/docker-entrypoint-initdb.d/1_schema.sql
@@ -25,8 +25,8 @@ services: # "services" defines the containers (3) I like to run
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/readdit
       # ^ "mysql" here is the SERVICE NAME above — containers find each other by service name
       SPRING_DATASOURCE_USERNAME: root
-      SPRING_DATASOURCE_PASSWORD: readdit123
-      APP_JWT_SECRET: 7a4b2c9d1e8f3a6b5c2d9e7f4a1b8c3d6e9f2a5b8c1d4e7f0a3b6c9d2e5f8a1b
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      APP_JWT_SECRET: ${APP_JWT_SECRET}
       APP_JWT_EXPIRATION: 86400000
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
     depends_on:
