@@ -1,0 +1,47 @@
+services: # "services" defines the containers (3) I like to run
+
+  mysql:
+    image: mysql:8  # Use the official MySQL 8 image from Docker Hub (no Dockerfile needed)
+    environment:    # Environment variables passed into the container (like .env)
+      MYSQL_ROOT_PASSWORD: readdit123
+      MYSQL_DATABASE: readdit # MySQL will auto-create this database on first start
+    volumes:
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/1_schema.sql
+      - ./database/data.sql:/docker-entrypoint-initdb.d/2_data.sql
+      - ./database/images.sql:/docker-entrypoint-initdb.d/3_images.sql
+      # ^ Copy my schema.sql and data.sql into MySQL's init folder — it runs automatically on first start
+      - mysql_data:/var/lib/mysql
+      # ^ Save the database data to a named volume so it survives container restarts
+    healthcheck:     # Test if MySQL is ready before starting the backend
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s  # Check every 10 seconds
+      retries: 5     # Give up after 5 failed checks
+
+  backend:
+    build: ./backend # Build using backend/Dockerfile
+    ports:
+      - "8080:8080"  # "my laptop port : container port" — makes backend reachable at localhost:8080
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/readdit
+      # ^ "mysql" here is the SERVICE NAME above — containers find each other by service name
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: readdit123
+      APP_JWT_SECRET: 7a4b2c9d1e8f3a6b5c2d9e7f4a1b8c3d6e9f2a5b8c1d4e7f0a3b6c9d2e5f8a1b
+      APP_JWT_EXPIRATION: 86400000
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+    depends_on:
+      mysql:
+        condition: service_healthy # Don't start backend until MySQL passes its healthcheck
+
+  frontend:
+    build:
+      context: ./frontend     # Build using frontend/Dockerfile
+      args:
+        VITE_API_BASE_URL: "" # Empty = use relative path "/api/data", Nginx proxies it
+    ports:
+      - "80:80"               # Frontend accessible at http://localhost
+    depends_on:
+      - backend               # Start frontend after backend is up
+
+volumes:
+  mysql_data:                 # Declares the named volume used above (persists DB data) optional but professional convention
