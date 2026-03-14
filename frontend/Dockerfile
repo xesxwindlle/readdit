@@ -11,6 +11,10 @@ RUN npm install
 COPY . .
 
 # Pass the backend URL at build time so Vite can embed it
+# But ARG VITE_API_BASE_URL shouldn't have default value
+# during production environment, because this default value 
+# will be baked into the image, and users will always send
+# requests to their own port
 ARG VITE_API_BASE_URL=http://localhost:8080
 ENV VITE_API_BASE_URL=$VITE_API_BASE_URL
 
