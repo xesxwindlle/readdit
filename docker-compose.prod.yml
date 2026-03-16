@@ -1,0 +1,41 @@
+services:
+
+  mysql:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: readdit
+    volumes:
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/1_schema.sql
+      - ./database/data.sql:/docker-entrypoint-initdb.d/2_data.sql
+      - ./database/images.sql:/docker-entrypoint-initdb.d/3_images.sql
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      retries: 5
+
+  backend:
+    image: haoenc/readdit-backend  # Pull from Docker Hub
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/readdit
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${SPRING_DATASOURCE_PASSWORD}
+      APP_JWT_SECRET: ${APP_JWT_SECRET}
+      APP_JWT_EXPIRATION: 86400000
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    image: haoenc/readdit-frontend  # Pull from Docker Hub
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:
