@@ -1,5 +1,6 @@
 # Secrets
 .env
+k8s/secrets.yaml
 
 # macOS
 .DS_Store
