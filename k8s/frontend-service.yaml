@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: readdit
+spec:
+  selector:
+    app: frontend
+  ports:
+    - port: 80
+      targetPort: 80
+  type: ClusterIP
+  
+  ### Using NodePort (without Ingress)
+      # nodePort: 30080   # Access locally at http://$(minikube ip):30080
+  # type: NodePort
